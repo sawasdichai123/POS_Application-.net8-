@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StockApplication.Views.Reports.ExpiryReportPage"
+             Title="Expiry Report">
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="15">
+        <!-- Header -->
+        <VerticalStackLayout Grid.Row="0" Margin="0,10,0,20">
+            <Label Text="Expiry Report" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   TextColor="#FF9800"/>
+            
+            <!-- Days Threshold Selector -->
+            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" Margin="0,15,0,0">
+                <Label Grid.Column="0" 
+                       Text="Days Until Expiry:" 
+                       VerticalOptions="Center"/>
+                <Slider Grid.Column="1" 
+                        x:Name="DaysSlider" 
+                        Minimum="1" 
+                        Maximum="90" 
+                        Value="30"/>
+                <Label Grid.Column="2" 
+                       x:Name="DaysValueLabel" 
+                       Text="30" 
+                       VerticalOptions="Center"/>
+            </Grid>
+            
+            <Button Text="Apply" 
+                    BackgroundColor="#FF9800"
+                    TextColor="White"
+                    CornerRadius="5"
+                    HorizontalOptions="End"
+                    Margin="0,10,0,0"
+                    x:Name="ApplyButton"/>
+        </VerticalStackLayout>
+        
+        <!-- Summary Cards -->
+        <Grid Grid.Row="1" ColumnDefinitions="*,*,*" ColumnSpacing="15" Margin="0,0,0,20">
+            <!-- Expiring Soon Card -->
+            <Frame Grid.Column="0" 
+                   BorderColor="Transparent"
+                   BackgroundColor="#FFF3E0"
+                   CornerRadius="10"
+                   Padding="10">
+                <Grid RowDefinitions="30,Auto" VerticalOptions="Center">
+                    <Label Grid.Row="0"
+                           Text="Expiring Soon" 
+                           FontSize="14" 
+                           TextColor="#E65100"
+                           HorizontalOptions="Center"
+                           VerticalOptions="End"
+                           HorizontalTextAlignment="Center"/>
+                    <Label Grid.Row="1"
+                           x:Name="ExpiringSoonLabel" 
+                           Text="0" 
+                           FontSize="24" 
+                           FontAttributes="Bold"
+                           TextColor="#E65100"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Start"
+                           HorizontalTextAlignment="Center"/>
+                </Grid>
+            </Frame>
+            
+            <!-- Expiring This Week Card -->
+            <Frame Grid.Column="1" 
+                   BorderColor="Transparent"
+                   BackgroundColor="#FFECB3"
+                   CornerRadius="10"
+                   Padding="10">
+                <Grid RowDefinitions="30,Auto" VerticalOptions="Center">
+                    <Label Grid.Row="0"
+                           Text="This Week" 
+                           FontSize="14" 
+                           TextColor="#FF8F00"
+                           HorizontalOptions="Center"
+                           VerticalOptions="End"
+                           HorizontalTextAlignment="Center"/>
+                    <Label Grid.Row="1"
+                           x:Name="ThisWeekLabel" 
+                           Text="0" 
+                           FontSize="24" 
+                           FontAttributes="Bold"
+                           TextColor="#FF8F00"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Start"
+                           HorizontalTextAlignment="Center"/>
+                </Grid>
+            </Frame>
+            
+            <!-- Expired Card -->
+            <Frame Grid.Column="2" 
+                   BorderColor="Transparent"
+                   BackgroundColor="#FFCCBC"
+                   CornerRadius="10"
+                   Padding="10">
+                <Grid RowDefinitions="30,Auto" VerticalOptions="Center">
+                    <Label Grid.Row="0"
+                           Text="Expired" 
+                           FontSize="14" 
+                           TextColor="#D84315"
+                           HorizontalOptions="Center"
+                           VerticalOptions="End"
+                           HorizontalTextAlignment="Center"/>
+                    <Label Grid.Row="1"
+                           x:Name="ExpiredLabel" 
+                           Text="0" 
+                           FontSize="24" 
+                           FontAttributes="Bold"
+                           TextColor="#D84315"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Start"
+                           HorizontalTextAlignment="Center"/>
+                </Grid>
+            </Frame>
+        </Grid>
+        
+        <!-- Data Table -->
+        <Frame Grid.Row="2" 
+               BorderColor="#E0E0E0"
+               CornerRadius="10"
+               Padding="0"
+               Margin="0,0,0,20">
+            <CollectionView x:Name="ExpiryItemsCollection">
+                <CollectionView.Header>
+                    <Grid ColumnDefinitions="*, *, *, *" BackgroundColor="#F5F5F5" Padding="15">
+                        <Label Grid.Column="0" Text="Item Name" FontAttributes="Bold"/>
+                        <Label Grid.Column="1" Text="Expiry Date" FontAttributes="Bold"/>
+                        <Label Grid.Column="2" Text="Days Left" FontAttributes="Bold"/>
+                        <Label Grid.Column="3" Text="Quantity" FontAttributes="Bold"/>
+                    </Grid>
+                </CollectionView.Header>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid ColumnDefinitions="*, *, *, *" Padding="15">
+                            <Label Grid.Column="0" Text="{Binding Stock_Name}"/>
+                            <Label Grid.Column="1" Text="{Binding ExpiryDate, StringFormat='{0:MM/dd/yyyy}'}"/>
+                            <Label Grid.Column="2" Text="{Binding DaysUntilExpiry}" TextColor="{Binding ExpiryColor}"/>
+                            <Label Grid.Column="3" Text="{Binding Quantity, StringFormat='{0} {1}'}" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.EmptyView>
+                    <StackLayout HorizontalOptions="Center" VerticalOptions="Center" Padding="20">
+                        <Label Text="No items expiring soon" 
+                               TextColor="#757575" 
+                               HorizontalOptions="Center"/>
+                        <Label Text="All stock items have expiry dates beyond the threshold" 
+                               TextColor="#BDBDBD" 
+                               HorizontalOptions="Center"/>
+                    </StackLayout>
+                </CollectionView.EmptyView>
+            </CollectionView>
+        </Frame>
+        
+        <!-- Export Options -->
+        <Grid Grid.Row="3" ColumnDefinitions="*,*" ColumnSpacing="15">
+            <Button Grid.Column="0"
+                    Text="Export as CSV"
+                    BackgroundColor="#795548"
+                    TextColor="White"
+                    CornerRadius="5"
+                    x:Name="ExportCsvButton"/>
+            
+            <Button Grid.Column="1"
+                    Text="Export as PDF"
+                    BackgroundColor="#E91E63"
+                    TextColor="White"
+                    CornerRadius="5"
+                    x:Name="ExportPdfButton"/>
+        </Grid>
+    </Grid>
+</ContentPage>

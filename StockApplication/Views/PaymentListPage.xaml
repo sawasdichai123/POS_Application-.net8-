@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StockApplication.Views.PaymentListPage"
+             Title="Payments">
+    
+    <Grid RowDefinitions="Auto,*,Auto" Padding="15">
+        <!-- Header -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,10,0,20">
+            <VerticalStackLayout Grid.Column="0">
+                <Label Text="Payments" 
+                       FontSize="24" 
+                       FontAttributes="Bold" 
+                       TextColor="#3F51B5"/>
+                <Label Text="View and manage payment records" 
+                       FontSize="14" 
+                       TextColor="#757575"
+                       Margin="0,5,0,0"/>
+            </VerticalStackLayout>
+            
+            <Button Grid.Column="1"
+                    Text="+ Record Payment"
+                    BackgroundColor="#4CAF50"
+                    TextColor="White"
+                    CornerRadius="10"
+                    HeightRequest="40"
+                    VerticalOptions="Center"
+                    x:Name="AddPaymentButton"/>
+        </Grid>
+        
+        <!-- Filter Options -->
+        <Grid Grid.Row="1" RowDefinitions="Auto,*">
+            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto" Margin="0,0,0,15">
+                <!-- Date Range Selector -->
+                <Grid Grid.Row="0" Grid.Column="0" ColumnDefinitions="*,Auto,*" ColumnSpacing="10">
+                    <Frame Grid.Column="0"
+                           Padding="5"
+                           HasShadow="False"
+                           BorderColor="#E0E0E0"
+                           CornerRadius="5">
+                        <DatePicker x:Name="StartDatePicker"
+                                   Format="MMM dd, yyyy"
+                                   HorizontalOptions="FillAndExpand"/>
+                    </Frame>
+                    
+                    <Label Grid.Column="1"
+                           Text="to"
+                           VerticalOptions="Center"
+                           HorizontalOptions="Center"/>
+                    
+                    <Frame Grid.Column="2"
+                           Padding="5"
+                           HasShadow="False"
+                           BorderColor="#E0E0E0"
+                           CornerRadius="5">
+                        <DatePicker x:Name="EndDatePicker"
+                                   Format="MMM dd, yyyy"
+                                   HorizontalOptions="FillAndExpand"/>
+                    </Frame>
+                </Grid>
+                
+                <Button Grid.Row="0" Grid.Column="1"
+                        Text="Filter"
+                        BackgroundColor="#3F51B5"
+                        TextColor="White"
+                        CornerRadius="10"
+                        Margin="10,0,0,0"
+                        WidthRequest="80"
+                        x:Name="ApplyFilterButton"/>
+                
+                <!-- Payment Method Filter -->
+                <HorizontalStackLayout Grid.Row="1" Grid.ColumnSpan="2"
+                                     Spacing="10"
+                                     Margin="0,10,0,0">
+                    <Button Text="All"
+                            BackgroundColor="#3F51B5"
+                            TextColor="White"
+                            CornerRadius="5"
+                            HeightRequest="35"
+                            WidthRequest="60"
+                            x:Name="AllMethodButton"/>
+                    
+                    <Button Text="Cash"
+                            BackgroundColor="#E0E0E0"
+                            TextColor="#616161"
+                            CornerRadius="5"
+                            HeightRequest="35"
+                            WidthRequest="70"
+                            x:Name="CashMethodButton"/>
+                    
+                    <Button Text="Credit Card"
+                            BackgroundColor="#E0E0E0"
+                            TextColor="#616161"
+                            CornerRadius="5"
+                            HeightRequest="35"
+                            WidthRequest="110"
+                            x:Name="CreditCardMethodButton"/>
+                    
+                    <Button Text="Other"
+                            BackgroundColor="#E0E0E0"
+                            TextColor="#616161"
+                            CornerRadius="5"
+                            HeightRequest="35"
+                            WidthRequest="70"
+                            x:Name="OtherMethodButton"/>
+                </HorizontalStackLayout>
+            </Grid>
+            
+            <!-- Payment List -->
+            <RefreshView Grid.Row="1" x:Name="PaymentRefreshView">
+                <CollectionView x:Name="PaymentCollectionView"
+                               SelectionMode="Single">
+                    <CollectionView.EmptyView>
+                        <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                            <Image Source="empty_payment.png" 
+                                   HeightRequest="100" 
+                                   WidthRequest="100"
+                                   Opacity="0.5"
+                                   Margin="0,0,0,20"/>
+                            <Label Text="No payments found" 
+                                   FontSize="18" 
+                                   TextColor="#9E9E9E"
+                                   HorizontalOptions="Center"/>
+                            <Label Text="Adjust your filters or record a payment" 
+                                   FontSize="14" 
+                                   TextColor="#BDBDBD"
+                                   HorizontalOptions="Center"/>
+                        </StackLayout>
+                    </CollectionView.EmptyView>
+                    
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Margin="0,5,0,10"
+                                   Padding="15"
+                                   CornerRadius="10"
+                                   BorderColor="Transparent"
+                                   HasShadow="True">
+                                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
+                                    <!-- Payment ID and Date -->
+                                    <Grid Grid.Row="0" Grid.Column="0" ColumnDefinitions="Auto,*">
+                                        <Label Grid.Column="0"
+                                               Text="{Binding PaymentID, StringFormat='Payment #{0}'}" 
+                                               FontSize="16" 
+                                               FontAttributes="Bold"
+                                               TextColor="#212121"/>
+                                        
+                                        <Label Grid.Column="1"
+                                               Text="{Binding PaymentDate, StringFormat='{0:MM/dd/yyyy HH:mm}'}" 
+                                               FontSize="14"
+                                               TextColor="#757575"
+                                               HorizontalOptions="End"/>
+                                    </Grid>
+                                    
+                                    <!-- Order Info and Customer -->
+                                    <VerticalStackLayout Grid.Row="1" Grid.Column="0"
+                                                       Margin="0,10,0,10">
+                                        <!-- Order ID -->
+                                        <HorizontalStackLayout>
+                                            <Label Text="Order: " 
+                                                   FontSize="14"
+                                                   TextColor="#9E9E9E"/>
+                                            <Label Text="{Binding OrderID, StringFormat='#{0}'}" 
+                                                   FontSize="14"
+                                                   TextColor="#616161"/>
+                                        </HorizontalStackLayout>
+                                        
+                                        <!-- Customer -->
+                                        <HorizontalStackLayout Margin="0,5,0,0">
+                                            <Label Text="Customer: " 
+                                                   FontSize="14"
+                                                   TextColor="#9E9E9E"/>
+                                            <Label Text="{Binding CustomerName}" 
+                                                   FontSize="14"
+                                                   TextColor="#616161"/>
+                                        </HorizontalStackLayout>
+                                        
+                                        <!-- Points Earned -->
+                                        <HorizontalStackLayout Margin="0,5,0,0">
+                                            <Label Text="Points Earned: " 
+                                                   FontSize="14"
+                                                   TextColor="#9E9E9E"/>
+                                            <Label Text="{Binding PointsEarned}" 
+                                                   FontSize="14"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#FF6F00"/>
+                                        </HorizontalStackLayout>
+                                    </VerticalStackLayout>
+                                    
+                                    <!-- Amount and Method -->
+                                    <VerticalStackLayout Grid.Row="0" Grid.RowSpan="2" Grid.Column="1"
+                                                       Spacing="10"
+                                                       VerticalOptions="Center">
+                                        <Label Text="{Binding Total, StringFormat='฿{0:F2}'}"
+                                               FontSize="20"
+                                               FontAttributes="Bold"
+                                               TextColor="#4CAF50"
+                                               HorizontalOptions="Center"/>
+                                        
+                                        <Border StrokeShape="RoundRectangle 10,10,10,10"
+                                               BackgroundColor="#F5F5F5"
+                                               Padding="10,5">
+                                            <Label Text="{Binding PaymentMethod}"
+                                                   TextColor="#616161"
+                                                   FontSize="12"
+                                                   HorizontalOptions="Center"/>
+                                        </Border>
+                                    </VerticalStackLayout>
+                                    
+                                    <!-- Divider -->
+                                    <BoxView Grid.Row="2" Grid.ColumnSpan="2"
+                                            Color="#E0E0E0"
+                                            HeightRequest="1"
+                                            Margin="0,10"/>
+                                    
+                                    <!-- Action Buttons -->
+                                    <HorizontalStackLayout Grid.Row="3" Grid.ColumnSpan="2"
+                                                         Spacing="10"
+                                                         HorizontalOptions="End">
+                                        <Button Text="View Order"
+                                                FontSize="12"
+                                                BackgroundColor="#FF9800"
+                                                TextColor="White"
+                                                CornerRadius="5"
+                                                HeightRequest="30"
+                                                WidthRequest="100"
+                                                Padding="0"
+                                                CommandParameter="{Binding .}"
+                                                Clicked="OnViewOrderClicked"/>
+                                    </HorizontalStackLayout>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </Grid>
+        
+        <!-- Summary Bar -->
+        <Frame Grid.Row="2" 
+               Padding="15,10"
+               CornerRadius="10"
+               BorderColor="Transparent"
+               BackgroundColor="#F5F5F5"
+               HasShadow="False"
+               Margin="0,10,0,0">
+            <Grid ColumnDefinitions="*,*,*">
+                <VerticalStackLayout Grid.Column="0" HorizontalOptions="Center">
+                    <Label Text="Total Payments" 
+                           FontSize="12" 
+                           TextColor="#9E9E9E"
+                           HorizontalOptions="Center"/>
+                    <Label x:Name="TotalPaymentsLabel" 
+                           Text="0" 
+                           FontSize="16" 
+                           FontAttributes="Bold"
+                           TextColor="#212121"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+                
+                <VerticalStackLayout Grid.Column="1" HorizontalOptions="Center">
+                    <Label Text="Total Revenue" 
+                           FontSize="12" 
+                           TextColor="#9E9E9E"
+                           HorizontalOptions="Center"/>
+                    <Label x:Name="TotalRevenueLabel" 
+                           Text="฿0.00" 
+                           FontSize="16" 
+                           FontAttributes="Bold"
+                           TextColor="#4CAF50"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+                
+                <VerticalStackLayout Grid.Column="2" HorizontalOptions="Center">
+                    <Label Text="Points Awarded" 
+                           FontSize="12" 
+                           TextColor="#9E9E9E"
+                           HorizontalOptions="Center"/>
+                    <Label x:Name="TotalPointsLabel" 
+                           Text="0" 
+                           FontSize="16" 
+                           FontAttributes="Bold"
+                           TextColor="#FF6F00"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Grid>
+        </Frame>
+    </Grid>
+</ContentPage>

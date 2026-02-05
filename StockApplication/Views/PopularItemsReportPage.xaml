@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StockApplication.Views.Reports.PopularItemsReportPage"
+             Title="Popular Items">
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="15">
+        <!-- Header -->
+        <VerticalStackLayout Grid.Row="0" Margin="0,10,0,20">
+            <Label Text="Popular Items Report" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   TextColor="#2196F3"/>
+            
+            <!-- Date Range and Filters -->
+            <Grid ColumnDefinitions="Auto,*,Auto,*" ColumnSpacing="10" Margin="0,15,0,0">
+                <Label Grid.Column="0" Text="From:" VerticalOptions="Center"/>
+                <DatePicker Grid.Column="1" x:Name="StartDatePicker"/>
+                <Label Grid.Column="2" Text="To:" VerticalOptions="Center"/>
+                <DatePicker Grid.Column="3" x:Name="EndDatePicker"/>
+            </Grid>
+            
+            <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" Margin="0,10,0,0">
+                <Label Grid.Column="0" 
+                       Text="Top Items:" 
+                       VerticalOptions="Center"/>
+                <Slider Grid.Column="1" 
+                        x:Name="TopItemsSlider" 
+                        Minimum="5" 
+                        Maximum="20" 
+                        Value="10"/>
+                <Label Grid.Column="2" 
+                       x:Name="TopItemsValueLabel" 
+                       Text="10" 
+                       VerticalOptions="Center"/>
+            </Grid>
+            
+            <Button Text="Apply" 
+                    BackgroundColor="#2196F3"
+                    TextColor="White"
+                    CornerRadius="5"
+                    HorizontalOptions="End"
+                    Margin="0,10,0,0"
+                    x:Name="ApplyButton"/>
+        </VerticalStackLayout>
+        
+        <!-- Popular Items List -->
+        <Frame Grid.Row="1" 
+               BorderColor="#E0E0E0"
+               CornerRadius="10"
+               Padding="15"
+               Margin="0,0,0,20">
+            <VerticalStackLayout Spacing="15">
+                <Label Text="Top Selling Items" 
+                       FontSize="18" 
+                       FontAttributes="Bold" 
+                       TextColor="#2196F3"/>
+                
+                <CollectionView x:Name="PopularItemsCollection"
+                               HeightRequest="300">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="Auto,*,Auto" Padding="10">
+                                <Label Grid.Column="0" 
+                                       Text="{Binding Rank}" 
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       TextColor="#2196F3"
+                                       VerticalOptions="Center"
+                                       Margin="0,0,15,0"/>
+                                
+                                <VerticalStackLayout Grid.Column="1">
+                                    <Label Text="{Binding Menu_name}" 
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="#212121"/>
+                                    
+                                    <Label Text="{Binding Category}" 
+                                           FontSize="14"
+                                           TextColor="#757575"/>
+                                </VerticalStackLayout>
+                                
+                                <VerticalStackLayout Grid.Column="2" 
+                                                   HorizontalOptions="End">
+                                    <Label Text="{Binding Quantity, StringFormat='{0} orders'}"
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="#2196F3"
+                                           HorizontalOptions="End"/>
+                                    
+                                    <Label Text="{Binding Revenue, StringFormat='฿{0:F2}'}"
+                                           FontSize="14"
+                                           TextColor="#757575"
+                                           HorizontalOptions="End"/>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                    <CollectionView.EmptyView>
+                        <StackLayout HorizontalOptions="Center" VerticalOptions="Center" Padding="20">
+                            <Label Text="No order data found" 
+                                   TextColor="#757575" 
+                                   HorizontalOptions="Center"/>
+                            <Label Text="Try adjusting the date filter to see popular items" 
+                                   TextColor="#BDBDBD" 
+                                   HorizontalOptions="Center"/>
+                        </StackLayout>
+                    </CollectionView.EmptyView>
+                </CollectionView>
+            </VerticalStackLayout>
+        </Frame>
+        
+        <!-- Sales by Category -->
+        <Frame Grid.Row="2" 
+               BorderColor="#E0E0E0"
+               CornerRadius="10"
+               Padding="15"
+               Margin="0,0,0,20">
+            <VerticalStackLayout Spacing="15">
+                <Label Text="Sales by Category" 
+                       FontSize="18" 
+                       FontAttributes="Bold" 
+                       TextColor="#2196F3"/>
+                
+                <CollectionView x:Name="CategorySalesCollection">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid ColumnDefinitions="*,Auto" Padding="10">
+                                <Label Grid.Column="0" 
+                                       Text="{Binding Category}" 
+                                       FontSize="16"
+                                       FontAttributes="Bold"
+                                       TextColor="#212121"
+                                       VerticalOptions="Center"/>
+                                
+                                <VerticalStackLayout Grid.Column="1" 
+                                                   HorizontalOptions="End">
+                                    <Label Text="{Binding Quantity, StringFormat='{0} items'}"
+                                           FontSize="16"
+                                           TextColor="#757575"
+                                           HorizontalOptions="End"/>
+                                    
+                                    <Label Text="{Binding Revenue, StringFormat='฿{0:F2}'}"
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="#2196F3"
+                                           HorizontalOptions="End"/>
+                                </VerticalStackLayout>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </VerticalStackLayout>
+        </Frame>
+        
+        <!-- Export Options -->
+        <Grid Grid.Row="3" ColumnDefinitions="*,*" ColumnSpacing="15">
+            <Button Grid.Column="0"
+                    Text="Export as CSV"
+                    BackgroundColor="#795548"
+                    TextColor="White"
+                    CornerRadius="5"
+                    x:Name="ExportCsvButton"/>
+            
+            <Button Grid.Column="1"
+                    Text="Export as PDF"
+                    BackgroundColor="#E91E63"
+                    TextColor="White"
+                    CornerRadius="5"
+                    x:Name="ExportPdfButton"/>
+        </Grid>
+    </Grid>
+</ContentPage>

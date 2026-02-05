@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StockApplication.Views.Reports.SalesSummaryReportPage"
+             Title="Sales Summary">
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="15">
+        <!-- Header -->
+        <VerticalStackLayout Grid.Row="0" Margin="0,10,0,20">
+            <Label Text="Sales Summary Report" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   TextColor="#4CAF50"/>
+            
+            <!-- Date Range Selector -->
+            <Grid ColumnDefinitions="Auto,*,Auto,*" ColumnSpacing="10" Margin="0,15,0,0">
+                <Label Grid.Column="0" Text="From:" VerticalOptions="Center"/>
+                <DatePicker Grid.Column="1" x:Name="StartDatePicker"/>
+                <Label Grid.Column="2" Text="To:" VerticalOptions="Center"/>
+                <DatePicker Grid.Column="3" x:Name="EndDatePicker"/>
+            </Grid>
+            
+            <Button Text="Apply" 
+                    BackgroundColor="#4CAF50"
+                    TextColor="White"
+                    CornerRadius="5"
+                    HorizontalOptions="End"
+                    Margin="0,10,0,0"
+                    x:Name="ApplyButton"/>
+        </VerticalStackLayout>
+        
+        <!-- Summary Cards -->
+        <Grid Grid.Row="1" RowDefinitions="Auto,Auto" RowSpacing="15" Margin="0,0,0,20">
+            <!-- Top Row Cards -->
+            <Grid Grid.Row="0" ColumnDefinitions="*,*,*" ColumnSpacing="15">
+                <!-- Total Orders -->
+                <Frame Grid.Column="0" 
+                       BorderColor="Transparent"
+                       BackgroundColor="#E8F5E9"
+                       CornerRadius="10"
+                       Padding="15">
+                    <VerticalStackLayout HorizontalOptions="Center">
+                        <Label Text="Total Orders" 
+                               FontSize="14" 
+                               TextColor="#2E7D32"
+                               HorizontalOptions="Center"/>
+                        <Label x:Name="TotalOrdersLabel" 
+                               Text="0" 
+                               FontSize="24" 
+                               FontAttributes="Bold"
+                               TextColor="#2E7D32"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Frame>
+                
+                <!-- Total Revenue -->
+                <Frame Grid.Column="1" 
+                       BorderColor="Transparent"
+                       BackgroundColor="#E8F5E9"
+                       CornerRadius="10"
+                       Padding="15">
+                    <VerticalStackLayout HorizontalOptions="Center">
+                        <Label Text="Revenue" 
+                               FontSize="14" 
+                               TextColor="#2E7D32"
+                               HorizontalOptions="Center"/>
+                        <Label x:Name="TotalRevenueLabel" 
+                               Text="฿0.00" 
+                               FontSize="24" 
+                               FontAttributes="Bold"
+                               TextColor="#2E7D32"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Frame>
+                
+                <!-- Average Order Value -->
+                <Frame Grid.Column="2" 
+                       BorderColor="Transparent"
+                       BackgroundColor="#E8F5E9"
+                       CornerRadius="10"
+                       Padding="15">
+                    <VerticalStackLayout HorizontalOptions="Center">
+                        <Label Text="Avg Order" 
+                               FontSize="14" 
+                               TextColor="#2E7D32"
+                               HorizontalOptions="Center"/>
+                        <Label x:Name="AvgOrderLabel" 
+                               Text="฿0.00" 
+                               FontSize="24" 
+                               FontAttributes="Bold"
+                               TextColor="#2E7D32"
+                               HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
+            
+            <!-- Status Breakdown Card -->
+            <Frame Grid.Row="1"
+                   BorderColor="Transparent"
+                   BackgroundColor="#F5F5F5"
+                   CornerRadius="10"
+                   Padding="15">
+                <Grid ColumnDefinitions="Auto,*,Auto,*,Auto,*">
+                    <!-- Pending -->
+                    <BoxView Grid.Column="0" 
+                             Color="#FF9800"
+                             WidthRequest="15"
+                             HeightRequest="15"
+                             VerticalOptions="Center"/>
+                    <VerticalStackLayout Grid.Column="1" 
+                                         VerticalOptions="Center"
+                                         Margin="5,0,15,0">
+                        <Label Text="Pending" 
+                               TextColor="#616161"/>
+                        <Label x:Name="PendingCountLabel" 
+                               Text="0" 
+                               TextColor="#FF9800"
+                               FontAttributes="Bold"/>
+                    </VerticalStackLayout>
+                    
+                    <!-- Paid -->
+                    <BoxView Grid.Column="2" 
+                             Color="#4CAF50"
+                             WidthRequest="15"
+                             HeightRequest="15"
+                             VerticalOptions="Center"/>
+                    <VerticalStackLayout Grid.Column="3" 
+                                         VerticalOptions="Center"
+                                         Margin="5,0,15,0">
+                        <Label Text="Paid" 
+                               TextColor="#616161"/>
+                        <Label x:Name="PaidCountLabel" 
+                               Text="0" 
+                               TextColor="#4CAF50"
+                               FontAttributes="Bold"/>
+                    </VerticalStackLayout>
+                    
+                    <!-- Cancelled -->
+                    <BoxView Grid.Column="4" 
+                             Color="#F44336"
+                             WidthRequest="15"
+                             HeightRequest="15"
+                             VerticalOptions="Center"/>
+                    <VerticalStackLayout Grid.Column="5" 
+                                         VerticalOptions="Center"
+                                         Margin="5,0,0,0">
+                        <Label Text="Cancelled" 
+                               TextColor="#616161"/>
+                        <Label x:Name="CancelledCountLabel" 
+                               Text="0" 
+                               TextColor="#F44336"
+                               FontAttributes="Bold"/>
+                    </VerticalStackLayout>
+                </Grid>
+            </Frame>
+        </Grid>
+        
+        <!-- Data Table -->
+        <Frame Grid.Row="2" 
+               BorderColor="#E0E0E0"
+               CornerRadius="10"
+               Padding="0"
+               Margin="0,0,0,20">
+            <CollectionView x:Name="OrdersCollection">
+                <CollectionView.Header>
+                    <Grid ColumnDefinitions="*, *, *, *, *" BackgroundColor="#F5F5F5" Padding="15">
+                        <Label Grid.Column="0" Text="Order #" FontAttributes="Bold"/>
+                        <Label Grid.Column="1" Text="Date" FontAttributes="Bold"/>
+                        <Label Grid.Column="2" Text="Customer" FontAttributes="Bold"/>
+                        <Label Grid.Column="3" Text="Amount" FontAttributes="Bold"/>
+                        <Label Grid.Column="4" Text="Status" FontAttributes="Bold"/>
+                    </Grid>
+                </CollectionView.Header>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid ColumnDefinitions="*, *, *, *, *" Padding="15">
+                            <Label Grid.Column="0" Text="{Binding OrderID}"/>
+                            <Label Grid.Column="1" Text="{Binding OrderDate, StringFormat='{0:MM/dd/yyyy}'}"/>
+                            <Label Grid.Column="2" Text="{Binding CustomerName}"/>
+                            <Label Grid.Column="3" Text="{Binding TotalAmount, StringFormat='฿{0:F2}'}"/>
+                            <Label Grid.Column="4" 
+                                   Text="{Binding PaymentStatus}" 
+                                   TextColor="{Binding StatusColor}"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.EmptyView>
+                    <StackLayout HorizontalOptions="Center" VerticalOptions="Center" Padding="20">
+                        <Label Text="No orders in selected date range" 
+                               TextColor="#757575" 
+                               HorizontalOptions="Center"/>
+                        <Label Text="Try adjusting the date filter to see orders" 
+                               TextColor="#BDBDBD" 
+                               HorizontalOptions="Center"/>
+                    </StackLayout>
+                </CollectionView.EmptyView>
+            </CollectionView>
+        </Frame>
+        
+        <!-- Export Options -->
+        <Grid Grid.Row="3" ColumnDefinitions="*,*" ColumnSpacing="15">
+            <Button Grid.Column="0"
+                    Text="Export as CSV"
+                    BackgroundColor="#795548"
+                    TextColor="White"
+                    CornerRadius="5"
+                    x:Name="ExportCsvButton"/>
+            
+            <Button Grid.Column="1"
+                    Text="Export as PDF"
+                    BackgroundColor="#E91E63"
+                    TextColor="White"
+                    CornerRadius="5"
+                    x:Name="ExportPdfButton"/>
+        </Grid>
+    </Grid>
+</ContentPage>

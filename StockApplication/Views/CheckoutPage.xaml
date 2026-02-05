@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:StockApplication.ViewModels"
+             x:Class="StockApplication.Views.CheckoutPage"
+             Title="Checkout">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            <!-- Header -->
+            <Label Text="Checkout" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   TextColor="#3F51B5"/>
+            
+            <!-- Order Summary Section -->
+            <Frame Padding="20" 
+                   CornerRadius="10" 
+                   BorderColor="Transparent" 
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Order Summary" 
+                           FontSize="18" 
+                           FontAttributes="Bold" 
+                           TextColor="#3F51B5"/>
+                    
+                    <!-- Order ID and Date -->
+                    <Grid ColumnDefinitions="*,*">
+                        <VerticalStackLayout Grid.Column="0">
+                            <Label Text="Order #" 
+                                   FontSize="14" 
+                                   TextColor="#9E9E9E"/>
+                            <Label x:Name="OrderIdLabel" 
+                                   Text="0" 
+                                   FontSize="16" 
+                                   TextColor="#212121"/>
+                        </VerticalStackLayout>
+                        
+                        <VerticalStackLayout Grid.Column="1">
+                            <Label Text="Date" 
+                                   FontSize="14" 
+                                   TextColor="#9E9E9E"/>
+                            <Label x:Name="OrderDateLabel" 
+                                   Text="00/00/0000" 
+                                   FontSize="16" 
+                                   TextColor="#212121"/>
+                        </VerticalStackLayout>
+                    </Grid>
+                    
+                    <!-- Table Selection -->
+                    <VerticalStackLayout>
+                        <Label Text="Table" 
+                               FontSize="14" 
+                               TextColor="#9E9E9E"/>
+                        <Frame Padding="0" 
+                               HasShadow="False" 
+                               BorderColor="#E0E0E0"
+                               BackgroundColor="#F5F5F5"
+                               CornerRadius="5">
+                            <Picker x:Name="TablePicker" 
+                                    Title="Select table"
+                                    ItemDisplayBinding="{Binding TableName}"
+                                    SelectedIndexChanged="OnTableSelectionChanged"/>
+                        </Frame>
+                        <Label x:Name="SelectedTableLabel"
+                               Text="No table selected"
+                               FontSize="12"
+                               TextColor="#616161"
+                               Margin="5,5,0,0"/>
+                    </VerticalStackLayout>
+                    
+                    <!-- Customer Selection Section -->
+                    <VerticalStackLayout>
+                        <Label Text="Customer" 
+                               FontSize="14" 
+                               TextColor="#616161"/>
+                        
+                        <!-- Customer Type Selection -->
+                        <HorizontalStackLayout Spacing="15" Margin="0,0,0,10">
+                            <HorizontalStackLayout Spacing="5">
+                                <RadioButton x:Name="GuestRadioButton" 
+                                           GroupName="CustomerType"
+                                           IsChecked="True"
+                                           CheckedChanged="OnCustomerTypeChanged"/>
+                                <Label Text="Guest" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                            
+                            <HorizontalStackLayout Spacing="5">
+                                <RadioButton x:Name="MemberRadioButton" 
+                                           GroupName="CustomerType"
+                                           CheckedChanged="OnCustomerTypeChanged"/>
+                                <Label Text="Member" VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                        </HorizontalStackLayout>
+                        
+                        <!-- Member Selection Section (shown only when Member is selected) -->
+                        <VerticalStackLayout x:Name="MemberSelectionPanel" IsVisible="false" Spacing="10">
+                            <!-- Search Bar -->
+                            <Frame Padding="10,0"
+                                   HasShadow="False" 
+                                   BorderColor="#E0E0E0"
+                                   CornerRadius="5"
+                                   HeightRequest="40">
+                                <Grid ColumnDefinitions="Auto,*">
+                                    <Label Grid.Column="0"
+                                           Text="🔍"
+                                           FontSize="16"
+                                           VerticalOptions="Center"
+                                           Margin="0,0,10,0"/>
+                                    
+                                    <Entry Grid.Column="1"
+                                           x:Name="CustomerSearchEntry"
+                                           Placeholder="Search by name or ID..."
+                                           PlaceholderColor="#BDBDBD"
+                                           VerticalOptions="Center"
+                                           TextChanged="OnCustomerSearchTextChanged"
+                                           ClearButtonVisibility="WhileEditing"/>
+                                </Grid>
+                            </Frame>
+                            
+                            <!-- Customer List -->
+                            <Frame Padding="0"
+                                   HasShadow="False" 
+                                   BorderColor="#E0E0E0"
+                                   CornerRadius="5"
+                                   HeightRequest="150">
+                                <CollectionView x:Name="CustomerCollectionView"
+                                               SelectionMode="Single"
+                                               SelectionChanged="OnCustomerSelected">
+                                    <CollectionView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Padding="10" ColumnDefinitions="Auto,*,Auto">
+                                                <Label Grid.Column="0"
+                                                       Text="{Binding MemberID}"
+                                                       VerticalOptions="Center"
+                                                       FontSize="14"
+                                                       TextColor="#757575"
+                                                       Margin="0,0,10,0"/>
+                                                
+                                                <Label Grid.Column="1"
+                                                       Text="{Binding Cus_Name}"
+                                                       VerticalOptions="Center"
+                                                       FontSize="16"
+                                                       TextColor="#212121"/>
+                                                
+                                                <Label Grid.Column="2"
+                                                       Text="{Binding Points, StringFormat='{0} pts'}"
+                                                       VerticalOptions="Center"
+                                                       FontSize="14"
+                                                       TextColor="#FF6F00"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </CollectionView.ItemTemplate>
+                                    <CollectionView.EmptyView>
+                                        <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                                            <Label Text="No customers found" 
+                                                   TextColor="#9E9E9E"
+                                                   HorizontalOptions="Center"/>
+                                        </StackLayout>
+                                    </CollectionView.EmptyView>
+                                </CollectionView>
+                            </Frame>
+                        </VerticalStackLayout>
+                        
+                        <!-- Selected Customer Display -->
+                        <Frame Padding="10"
+                               HasShadow="False" 
+                               BorderColor="#E0E0E0"
+                               BackgroundColor="#F5F5F5"
+                               CornerRadius="5"
+                               Margin="0,10,0,0">
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Grid.Column="0"
+                                       x:Name="SelectedCustomerLabel"
+                                       Text="Guest"
+                                       FontAttributes="Bold"
+                                       TextColor="#3F51B5"/>
+                                
+                                <Button Grid.Column="1"
+                                        x:Name="ClearCustomerButton"
+                                        Text="Clear"
+                                        FontSize="12"
+                                        BackgroundColor="Transparent"
+                                        TextColor="#F44336"
+                                        Clicked="OnClearCustomerClicked"
+                                        IsVisible="false"/>
+                            </Grid>
+                        </Frame>
+                    </VerticalStackLayout>
+                    
+                    <!-- Divider -->
+                    <BoxView HeightRequest="1" 
+                             Color="#E0E0E0" 
+                             Margin="0,10"/>
+                    
+                    <!-- Order Items List -->
+                    <Label Text="Items" 
+                           FontSize="16" 
+                           FontAttributes="Bold" 
+                           TextColor="#616161"/>
+                    
+                    <Frame Padding="0"
+                           HasShadow="False" 
+                           BorderColor="#E0E0E0"
+                           CornerRadius="5"
+                           HeightRequest="180">
+                        <CollectionView x:Name="OrderItemsCollection" 
+                                       SelectionMode="None">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Padding="10" ColumnDefinitions="*,Auto,Auto">
+                                        <Label Grid.Column="0"
+                                               Text="{Binding Menu_name}" 
+                                               FontSize="16"
+                                               TextColor="#212121"
+                                               VerticalOptions="Center"/>
+                                        
+                                        <Label Grid.Column="1"
+                                               Text="{Binding Quantity, StringFormat='x{0}'}" 
+                                               Margin="10,0"
+                                               FontSize="14"
+                                               TextColor="#757575"
+                                               VerticalOptions="Center"/>
+                                        
+                                        <Label Grid.Column="2"
+                                               Text="{Binding Subtotal, StringFormat='฿{0:F2}'}" 
+                                               FontAttributes="Bold"
+                                               FontSize="16"
+                                               TextColor="#4CAF50"
+                                               VerticalOptions="Center"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                            <CollectionView.EmptyView>
+                                <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                                    <Label Text="No items in this order" 
+                                           TextColor="#9E9E9E"
+                                           HorizontalOptions="Center"/>
+                                </StackLayout>
+                            </CollectionView.EmptyView>
+                        </CollectionView>
+                    </Frame>
+                    
+                    <!-- Total Section -->
+                    <BoxView HeightRequest="1" 
+                             Color="#E0E0E0" 
+                             Margin="0,10"/>
+                    
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0"
+                               Text="Subtotal:" 
+                               FontSize="14" 
+                               TextColor="#616161"/>
+                        <Label Grid.Column="1"
+                               x:Name="SubtotalLabel"
+                               Text="฿0.00" 
+                               FontSize="14" 
+                               TextColor="#212121"/>
+                    </Grid>
+                    
+                    <Grid ColumnDefinitions="*,Auto" x:Name="DiscountGrid" IsVisible="false">
+                        <Label Grid.Column="0"
+                               Text="Member Discount (5%):" 
+                               FontSize="14" 
+                               TextColor="#FF6F00"/>
+                        <Label Grid.Column="1"
+                               x:Name="DiscountLabel"
+                               Text="-฿0.00" 
+                               FontSize="14" 
+                               TextColor="#FF6F00"/>
+                    </Grid>
+                    
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0"
+                               Text="Tax (10%):" 
+                               FontSize="14" 
+                               TextColor="#616161"/>
+                        <Label Grid.Column="1"
+                               x:Name="TaxLabel"
+                               Text="฿0.00" 
+                               FontSize="14" 
+                               TextColor="#212121"/>
+                    </Grid>
+                    
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Grid.Column="0"
+                               Text="Total:" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="#212121"/>
+                        <Label Grid.Column="1"
+                               x:Name="TotalLabel"
+                               Text="฿0.00" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="#4CAF50"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+            
+            <!-- Payment Method Section - MODIFIED -->
+            <Frame Padding="20" 
+                   CornerRadius="10" 
+                   BorderColor="Transparent" 
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Payment Method" 
+                           FontSize="18" 
+                           FontAttributes="Bold" 
+                           TextColor="#3F51B5"/>
+                    
+                    <VerticalStackLayout Spacing="10">
+                        <!-- Cash Option -->
+                        <HorizontalStackLayout Spacing="10">
+                            <RadioButton x:Name="CashRadioButton"
+                                       GroupName="PaymentMethod"
+                                       IsChecked="True"
+                                       CheckedChanged="OnPaymentMethodChanged"/>
+                            <Label Text="Cash" 
+                                   VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+                        
+                        <!-- Mobile Banking Option -->
+                        <HorizontalStackLayout Spacing="10">
+                            <RadioButton x:Name="MobileBankingRadioButton"
+                                       GroupName="PaymentMethod"
+                                       CheckedChanged="OnPaymentMethodChanged"/>
+                            <Label Text="Mobile Banking" 
+                                   VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+                        
+                        <!-- QR Code Option -->
+                        <HorizontalStackLayout Spacing="10">
+                            <RadioButton x:Name="QRCodeRadioButton"
+                                       GroupName="PaymentMethod"
+                                       CheckedChanged="OnPaymentMethodChanged"/>
+                            <Label Text="QR Code" 
+                                   VerticalOptions="Center"/>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+            
+            <!-- Action Buttons -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="15" Margin="0,10,0,20">
+                <Button Grid.Column="0"
+                        Text="Cancel"
+                        BackgroundColor="#E0E0E0"
+                        TextColor="#616161"
+                        CornerRadius="10"
+                        x:Name="CancelButton"
+                        Clicked="OnCancelClicked"/>
+                
+                <Button Grid.Column="1"
+                        Text="Complete Payment"
+                        BackgroundColor="#4CAF50"
+                        TextColor="White"
+                        CornerRadius="10"
+                        x:Name="CompletePaymentButton"
+                        Clicked="OnCompletePaymentClicked"/>
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

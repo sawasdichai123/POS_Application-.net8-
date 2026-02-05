@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StockApplication.Views.CustomerListPage"
+             Title="Customers">
+    
+    <Grid RowDefinitions="Auto,*,Auto" Padding="15">
+        <!-- Header -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,10,0,20">
+            <VerticalStackLayout Grid.Column="0">
+                <Label Text="Customers" 
+                       FontSize="24" 
+                       FontAttributes="Bold" 
+                       TextColor="#3F51B5"/>
+                <Label Text="Manage your customers and members" 
+                       FontSize="14" 
+                       TextColor="#757575"
+                       Margin="0,5,0,0"/>
+            </VerticalStackLayout>
+            
+            <Button Grid.Column="1"
+                    Text="+ Add Customer"
+                    BackgroundColor="#4CAF50"
+                    TextColor="White"
+                    CornerRadius="10"
+                    HeightRequest="40"
+                    VerticalOptions="Center"
+                    x:Name="AddCustomerButton"/>
+        </Grid>
+        
+        <!-- Search Bar -->
+        <Grid Grid.Row="1" RowDefinitions="Auto,*">
+            <Frame Padding="15,0"
+                   CornerRadius="10"
+                   BorderColor="#E0E0E0"
+                   HasShadow="False"
+                   Margin="0,0,0,15">
+                <Entry Placeholder="Search customers by name or phone..."
+                       PlaceholderColor="#9E9E9E"
+                       x:Name="SearchEntry"
+                       VerticalOptions="Center"
+                       ClearButtonVisibility="WhileEditing"/>
+            </Frame>
+            
+            <!-- Customer List -->
+            <RefreshView Grid.Row="1" x:Name="CustomerRefreshView">
+                <CollectionView x:Name="CustomerCollectionView"
+                               SelectionMode="Single">
+                    <CollectionView.EmptyView>
+                        <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                            <Image Source="empty_contacts.png" 
+                                   HeightRequest="100" 
+                                   WidthRequest="100"
+                                   Opacity="0.5"
+                                   Margin="0,0,0,20"/>
+                            <Label Text="No customers found" 
+                                   FontSize="18" 
+                                   TextColor="#9E9E9E"
+                                   HorizontalOptions="Center"/>
+                            <Label Text="Add your first customer to get started" 
+                                   FontSize="14" 
+                                   TextColor="#BDBDBD"
+                                   HorizontalOptions="Center"/>
+                        </StackLayout>
+                    </CollectionView.EmptyView>
+                    
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Margin="0,5,0,10"
+                                   Padding="15"
+                                   CornerRadius="10"
+                                   BorderColor="Transparent"
+                                   HasShadow="True">
+                                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto">
+                                    <!-- Customer Name and Points -->
+                                    <Grid Grid.Row="0" Grid.Column="0" ColumnDefinitions="*,Auto">
+                                        <Label Grid.Column="0"
+                                               Text="{Binding Cus_Name}" 
+                                               FontSize="18" 
+                                               FontAttributes="Bold"
+                                               TextColor="#212121"/>
+                                        
+                                        <Border Grid.Column="1"
+                                               Stroke="#E0E0E0"
+                                               StrokeThickness="1"
+                                               StrokeShape="RoundRectangle 10,10,10,10"
+                                               BackgroundColor="#FFECB3"
+                                               Padding="8,3"
+                                               HorizontalOptions="End">
+                                            <HorizontalStackLayout Spacing="5">
+                                                <Label Text="{Binding Points}"
+                                                       FontSize="14"
+                                                       FontAttributes="Bold"
+                                                       TextColor="#FF6F00"/>
+                                                <Label Text="Points"
+                                                       FontSize="14"
+                                                       TextColor="#FF6F00"/>
+                                            </HorizontalStackLayout>
+                                        </Border>
+                                    </Grid>
+                                    
+                                    <!-- Contact Info -->
+                                    <VerticalStackLayout Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2"
+                                                       Margin="0,10,0,10">
+                                        <!-- Customer ID -->
+                                        <HorizontalStackLayout>
+                                            <Label Text="Customer ID: " 
+                                                   FontSize="14"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#9E9E9E"/>
+                                            <Label Text="{Binding MemberID}" 
+                                                   FontSize="14"
+                                                   TextColor="#616161"/>
+                                        </HorizontalStackLayout>
+                                        
+                                        <!-- Phone -->
+                                        <HorizontalStackLayout Margin="0,5,0,0">
+                                            <Label Text="Phone: " 
+                                                   FontSize="14"
+                                                   TextColor="#9E9E9E"/>
+                                            <Label Text="{Binding Cus_Phone}" 
+                                                   FontSize="14"
+                                                   TextColor="#616161"/>
+                                        </HorizontalStackLayout>
+                                        
+                                        <!-- Email -->
+                                        <HorizontalStackLayout Margin="0,5,0,0">
+                                            <Label Text="Email: " 
+                                                   FontSize="14"
+                                                   TextColor="#9E9E9E"/>
+                                            <Label Text="{Binding Email}" 
+                                                   FontSize="14"
+                                                   TextColor="#616161"/>
+                                        </HorizontalStackLayout>
+                                        
+                                        <!-- Date of Birth -->
+                                        <HorizontalStackLayout Margin="0,5,0,0">
+                                            <Label Text="Birthday: " 
+                                                   FontSize="14"
+                                                   TextColor="#9E9E9E"/>
+                                            <Label Text="{Binding DateOfBirth, StringFormat='{0:MM/dd/yyyy}'}" 
+                                                   FontSize="14"
+                                                   TextColor="#616161"/>
+                                        </HorizontalStackLayout>
+                                    </VerticalStackLayout>
+                                    
+                                    <!-- Divider -->
+                                    <BoxView Grid.Row="2" Grid.ColumnSpan="2"
+                                            Color="#E0E0E0"
+                                            HeightRequest="1"
+                                            Margin="0,5,0,10"/>
+                                    
+                                    <!-- Action Buttons -->
+                                    <HorizontalStackLayout Grid.Row="3" Grid.ColumnSpan="2"
+                                                         Spacing="10"
+                                                         HorizontalOptions="End">
+                                        <Button Text="Edit"
+                                                FontSize="12"
+                                                BackgroundColor="#2196F3"
+                                                TextColor="White"
+                                                CornerRadius="5"
+                                                HeightRequest="30"
+                                                WidthRequest="60"
+                                                Padding="0"
+                                                CommandParameter="{Binding .}"
+                                                Clicked="OnEditCustomerClicked"/>
+                                        
+                                        <Button Text="Orders"
+                                                FontSize="12"
+                                                BackgroundColor="#FF9800"
+                                                TextColor="White"
+                                                CornerRadius="5"
+                                                HeightRequest="30"
+                                                WidthRequest="60"
+                                                Padding="0"
+                                                CommandParameter="{Binding .}"
+                                                Clicked="OnViewOrdersClicked"/>
+                                        
+                                        <Button Text="Delete"
+                                                FontSize="12"
+                                                BackgroundColor="#F44336"
+                                                TextColor="White"
+                                                CornerRadius="5"
+                                                HeightRequest="30"
+                                                WidthRequest="60"
+                                                Padding="0"
+                                                CommandParameter="{Binding .}"
+                                                Clicked="OnDeleteCustomerClicked"/>
+                                    </HorizontalStackLayout>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </Grid>
+        
+        <!-- Footer/Status Bar -->
+        <StackLayout Grid.Row="2" 
+                     Orientation="Horizontal" 
+                     HorizontalOptions="Center"
+                     Margin="0,20,0,10">
+            <Label x:Name="TotalItemsLabel" 
+                   Text="Total Customers: 0" 
+                   FontSize="14" 
+                   TextColor="#757575"/>
+        </StackLayout>
+    </Grid>
+</ContentPage>

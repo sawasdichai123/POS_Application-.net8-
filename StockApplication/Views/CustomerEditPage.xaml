@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StockApplication.Views.CustomerEditPage"
+             Title="Edit Customer">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            <!-- Header -->
+            <Label x:Name="PageTitleLabel" 
+                   Text="Add New Customer" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   TextColor="#3F51B5"/>
+            
+            <!-- Form Section -->
+            <Frame Padding="20" 
+                   CornerRadius="10" 
+                   BorderColor="Transparent" 
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="15">
+                    <!-- Customer Name -->
+                    <VerticalStackLayout>
+                        <Label Text="Customer Name *" 
+                               FontSize="14" 
+                               TextColor="#616161"/>
+                        <Frame Padding="5" 
+                               HasShadow="False" 
+                               BorderColor="#E0E0E0"
+                               CornerRadius="5">
+                            <Entry x:Name="CustomerNameEntry" 
+                                   Placeholder="Enter customer name"
+                                   PlaceholderColor="#BDBDBD"/>
+                        </Frame>
+                    </VerticalStackLayout>
+                    
+                    <!-- Phone -->
+                    <VerticalStackLayout>
+                        <Label Text="Phone" 
+                               FontSize="14" 
+                               TextColor="#616161"/>
+                        <Frame Padding="5" 
+                               HasShadow="False" 
+                               BorderColor="#E0E0E0"
+                               CornerRadius="5">
+                            <Entry x:Name="PhoneEntry" 
+                                   Placeholder="Enter phone number"
+                                   PlaceholderColor="#BDBDBD"
+                                   Keyboard="Telephone"/>
+                        </Frame>
+                    </VerticalStackLayout>
+                    
+                    <!-- Email -->
+                    <VerticalStackLayout>
+                        <Label Text="Email" 
+                               FontSize="14" 
+                               TextColor="#616161"/>
+                        <Frame Padding="5" 
+                               HasShadow="False" 
+                               BorderColor="#E0E0E0"
+                               CornerRadius="5">
+                            <Entry x:Name="EmailEntry" 
+                                   Placeholder="Enter email address"
+                                   PlaceholderColor="#BDBDBD"
+                                   Keyboard="Email"/>
+                        </Frame>
+                    </VerticalStackLayout>
+                    
+                    <!-- Date of Birth -->
+                    <VerticalStackLayout>
+                        <Label Text="Date of Birth" 
+                               FontSize="14" 
+                               TextColor="#616161"/>
+                        <Frame Padding="5" 
+                               HasShadow="False" 
+                               BorderColor="#E0E0E0"
+                               CornerRadius="5">
+                            <DatePicker x:Name="DateOfBirthPicker" 
+                                       Format="MMM dd, yyyy"/>
+                        </Frame>
+                    </VerticalStackLayout>
+                    
+                    <!-- Points -->
+                    <VerticalStackLayout>
+                        <Label Text="Points" 
+                               FontSize="14" 
+                               TextColor="#616161"/>
+                        <Frame Padding="5" 
+                               HasShadow="False" 
+                               BorderColor="#E0E0E0"
+                               CornerRadius="5">
+                            <Entry x:Name="PointsEntry" 
+                                   Placeholder="Enter points"
+                                   PlaceholderColor="#BDBDBD"
+                                   Keyboard="Numeric"
+                                   Text="0"/>
+                        </Frame>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+            
+            <!-- Action Buttons -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="15" Margin="0,10,0,20">
+                <Button Grid.Column="0"
+                        Text="Cancel"
+                        BackgroundColor="#E0E0E0"
+                        TextColor="#616161"
+                        CornerRadius="10"
+                        x:Name="CancelButton"/>
+                
+                <Button Grid.Column="1"
+                        Text="Save"
+                        BackgroundColor="#4CAF50"
+                        TextColor="White"
+                        CornerRadius="10"
+                        x:Name="SaveButton"/>
+            </Grid>
+            
+            <!-- Required Fields Note -->
+            <Label Text="* Required fields" 
+                   FontSize="12" 
+                   TextColor="#9E9E9E"
+                   HorizontalOptions="Center"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

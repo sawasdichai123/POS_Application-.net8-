@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StockApplication.Views.OrderListPage"
+             Title="Orders">
+    
+    <Grid RowDefinitions="Auto,*,Auto" Padding="15">
+        <!-- Header -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,10,0,20">
+            <VerticalStackLayout Grid.Column="0">
+                <Label Text="Orders" 
+                       FontSize="24" 
+                       FontAttributes="Bold" 
+                       TextColor="#3F51B5"/>
+                <Label Text="View and manage orders" 
+                       FontSize="14" 
+                       TextColor="#757575"
+                       Margin="0,5,0,0"/>
+            </VerticalStackLayout>
+            
+            <Button Grid.Column="1"
+                    Text="+ New Order"
+                    BackgroundColor="#4CAF50"
+                    TextColor="White"
+                    CornerRadius="10"
+                    HeightRequest="40"
+                    VerticalOptions="Center"
+                    x:Name="AddOrderButton"/>
+        </Grid>
+        
+        <!-- Filter Options -->
+        <Grid Grid.Row="1" RowDefinitions="Auto,*">
+            <HorizontalStackLayout Spacing="10" Margin="0,0,0,15">
+                <Button Text="All"
+                        BackgroundColor="#3F51B5"
+                        TextColor="White"
+                        CornerRadius="5"
+                        HeightRequest="35"
+                        WidthRequest="60"
+                        x:Name="AllFilterButton"/>
+                
+                <Button Text="Pending"
+                        BackgroundColor="#E0E0E0"
+                        TextColor="#616161"
+                        CornerRadius="5"
+                        HeightRequest="35"
+                        WidthRequest="82"
+                        x:Name="PendingFilterButton"/>
+                
+                <Button Text="Paid"
+                        BackgroundColor="#E0E0E0"
+                        TextColor="#616161"
+                        CornerRadius="5"
+                        HeightRequest="35"
+                        WidthRequest="60"
+                        x:Name="PaidFilterButton"/>
+                
+                <Button Text="Cancelled"
+                        BackgroundColor="#E0E0E0"
+                        TextColor="#616161"
+                        CornerRadius="5"
+                        HeightRequest="35"
+                        WidthRequest="90"
+                        x:Name="CancelledFilterButton"/>
+            </HorizontalStackLayout>
+            
+            <!-- Order List -->
+            <RefreshView Grid.Row="1" x:Name="OrderRefreshView">
+                <CollectionView x:Name="OrderCollectionView"
+                               SelectionMode="Single">
+                    <CollectionView.EmptyView>
+                        <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                            <Image Source="empty_order.png" 
+                                   HeightRequest="100" 
+                                   WidthRequest="100"
+                                   Opacity="0.5"
+                                   Margin="0,0,0,20"/>
+                            <Label Text="No orders found" 
+                                   FontSize="18" 
+                                   TextColor="#9E9E9E"
+                                   HorizontalOptions="Center"/>
+                            <Label Text="Create your first order to get started" 
+                                   FontSize="14" 
+                                   TextColor="#BDBDBD"
+                                   HorizontalOptions="Center"/>
+                        </StackLayout>
+                    </CollectionView.EmptyView>
+                    
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Margin="0,5,0,10"
+                                   Padding="15"
+                                   CornerRadius="10"
+                                   BorderColor="Transparent"
+                                   HasShadow="True">
+                                <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto">
+                                    <!-- Order ID and Date -->
+                                    <Grid Grid.Row="0" Grid.Column="0" ColumnDefinitions="Auto,*">
+                                        <Label Grid.Column="0"
+                                               Text="{Binding OrderID, StringFormat='Order #{0}'}" 
+                                               FontSize="18" 
+                                               FontAttributes="Bold"
+                                               TextColor="#212121"/>
+                                        
+                                        <Label Grid.Column="1"
+                                               Text="{Binding OrderDate, StringFormat='{0:MM/dd/yyyy}'}" 
+                                               FontSize="14"
+                                               TextColor="#757575"
+                                               HorizontalOptions="End"/>
+                                    </Grid>
+                                    
+                                    <!-- Order Details -->
+                                    <VerticalStackLayout Grid.Row="1" Grid.Column="0"
+                                                       Margin="0,10,0,10">
+                                        <!-- Customer -->
+                                        <HorizontalStackLayout>
+                                            <Label Text="Customer: " 
+                                                   FontSize="14"
+                                                   TextColor="#9E9E9E"/>
+                                            <Label Text="{Binding CustomerName}" 
+                                                   FontSize="14"
+                                                   FontAttributes="Bold"
+                                                   TextColor="#616161"/>
+                                        </HorizontalStackLayout>
+                                        
+                                        <!-- Staff -->
+                                        <HorizontalStackLayout Margin="0,5,0,0">
+                                            <Label Text="Staff: " 
+                                                   FontSize="14"
+                                                   TextColor="#9E9E9E"/>
+                                            <Label Text="{Binding StaffName}" 
+                                                   FontSize="14"
+                                                   TextColor="#616161"/>
+                                        </HorizontalStackLayout>
+                                        
+                                        <!-- Items Count -->
+                                        <HorizontalStackLayout Margin="0,5,0,0">
+                                            <Label Text="Items: " 
+                                                   FontSize="14"
+                                                   TextColor="#9E9E9E"/>
+                                            <Label Text="{Binding ItemsCount}" 
+                                                   FontSize="14"
+                                                   TextColor="#616161"/>
+                                        </HorizontalStackLayout>
+                                    </VerticalStackLayout>
+                                    
+                                    <!-- Status and Amount -->
+                                    <VerticalStackLayout Grid.Row="0" Grid.RowSpan="2" Grid.Column="1"
+                                                       Spacing="10"
+                                                       VerticalOptions="Center">
+                                        <!-- Status Badge -->
+                                        <Border Stroke="#E0E0E0"
+                                               StrokeThickness="1"
+                                               StrokeShape="RoundRectangle 10,10,10,10"
+                                               Padding="10,5"
+                                               BackgroundColor="{Binding StatusColor}">
+                                            <Label Text="{Binding PaymentStatus}"
+                                                   TextColor="White"
+                                                   FontSize="12"
+                                                   FontAttributes="Bold"
+                                                   HorizontalOptions="Center"/>
+                                        </Border>
+                                        
+                                        <!-- Amount -->
+                                        <Label Text="{Binding TotalAmount, StringFormat='฿{0:F2}'}"
+                                               FontSize="18"
+                                               FontAttributes="Bold"
+                                               TextColor="#3F51B5"
+                                               HorizontalOptions="Center"/>
+                                    </VerticalStackLayout>
+                                    
+                                    <!-- Divider -->
+                                    <BoxView Grid.Row="2" Grid.ColumnSpan="2"
+                                            Color="#E0E0E0"
+                                            HeightRequest="1"
+                                            Margin="0,10"/>
+                                    
+                                    <!-- Action Buttons -->
+                                    <HorizontalStackLayout Grid.Row="3" Grid.ColumnSpan="2"
+                                                         Spacing="10"
+                                                         HorizontalOptions="End">
+                                        <Button Text="Edit"
+                                                FontSize="12"
+                                                BackgroundColor="#2196F3"
+                                                TextColor="White"
+                                                CornerRadius="5"
+                                                HeightRequest="30"
+                                                WidthRequest="60"
+                                                Padding="0"
+                                                CommandParameter="{Binding .}"
+                                                Clicked="OnEditClicked"/>
+                                        
+                                        <Button Text="Details"
+                                                FontSize="12"
+                                                BackgroundColor="#FF9800"
+                                                TextColor="White"
+                                                CornerRadius="5"
+                                                HeightRequest="30"
+                                                WidthRequest="60"
+                                                Padding="0"
+                                                CommandParameter="{Binding .}"
+                                                Clicked="OnDetailsClicked"/>
+                                        
+                                        <Button Text="Checkout"
+                                                FontSize="12"
+                                                BackgroundColor="#4CAF50"
+                                                TextColor="White"
+                                                CornerRadius="5"
+                                                HeightRequest="30"
+                                                WidthRequest="80"
+                                                Padding="0"
+                                                CommandParameter="{Binding .}"
+                                                Clicked="OnCheckoutClicked"
+                                                IsVisible="{Binding CanCheckout}"/>
+                                    </HorizontalStackLayout>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </Grid>
+        
+        <!-- Footer/Status Bar -->
+        <StackLayout Grid.Row="2" 
+                     Orientation="Horizontal" 
+                     HorizontalOptions="Center"
+                     Margin="0,20,0,10">
+            <Label x:Name="TotalItemsLabel" 
+                   Text="Total Orders: 0" 
+                   FontSize="14" 
+                   TextColor="#757575"/>
+        </StackLayout>
+    </Grid>
+</ContentPage>

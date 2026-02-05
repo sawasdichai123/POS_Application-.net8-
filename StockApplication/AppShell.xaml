@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:views="clr-namespace:StockApplication.Views"
+       xmlns:local="clr-namespace:StockApplication"
+       x:Class="StockApplication.AppShell"
+       Title="Stock Application"
+       FlyoutBehavior="Flyout">
+
+    <Shell.Resources>
+        <ResourceDictionary>
+            <!-- Base style for navigation elements -->
+            <Style x:Key="BaseStyle" TargetType="Element">
+                <Setter Property="Shell.BackgroundColor" Value="#3F51B5"/>
+                <Setter Property="Shell.ForegroundColor" Value="White"/>
+                <Setter Property="Shell.TitleColor" Value="White"/>
+                <Setter Property="Shell.DisabledColor" Value="#B4FFFFFF"/>
+                <Setter Property="Shell.UnselectedColor" Value="#95FFFFFF"/>
+            </Style>
+
+            <!-- Icon style to ensure consistent sizing and alignment -->
+            <Style x:Key="IconStyle" TargetType="Image">
+                <Setter Property="HeightRequest" Value="24" />
+                <Setter Property="WidthRequest" Value="24" />
+                <Setter Property="VerticalOptions" Value="Center" />
+                <Setter Property="HorizontalOptions" Value="Start" />
+                <Setter Property="Margin" Value="0,0,16,0" />
+            </Style>
+
+            <!-- Style for ShellItems with consistent icon and text alignment -->
+            <Style TargetType="ShellItem" BasedOn="{StaticResource BaseStyle}" />
+        </ResourceDictionary>
+    </Shell.Resources>
+
+    <!-- Custom templates to ensure consistent layout -->
+    <Shell.ItemTemplate>
+        <DataTemplate>
+            <Grid Padding="16" ColumnDefinitions="Auto,*" ColumnSpacing="16">
+                <Image Grid.Column="0"
+                       Source="{Binding FlyoutIcon}"
+                       Style="{StaticResource IconStyle}" />
+                <Label Grid.Column="1"
+                       Text="{Binding Title}"
+                       FontSize="16"
+                       VerticalOptions="Center" />
+            </Grid>
+        </DataTemplate>
+    </Shell.ItemTemplate>
+
+    <Shell.MenuItemTemplate>
+        <DataTemplate>
+            <Grid Padding="16" ColumnDefinitions="Auto,*" ColumnSpacing="16">
+                <Image Grid.Column="0"
+                       Source="{Binding Icon}"
+                       Style="{StaticResource IconStyle}" />
+                <Label Grid.Column="1"
+                       Text="{Binding Text}"
+                       FontSize="16"
+                       VerticalOptions="Center" />
+            </Grid>
+        </DataTemplate>
+    </Shell.MenuItemTemplate>
+
+    <!-- Main TabBar - this will create the top navigation -->
+    <FlyoutItem Route="main" FlyoutDisplayOptions="AsMultipleItems">
+        <Tab Title="Orders" Icon="orderhistory.png">
+            <ShellContent ContentTemplate="{DataTemplate views:OrderListPage}" Route="orders" />
+        </Tab>
+        <Tab Title="Customers" Icon="review.png">
+            <ShellContent ContentTemplate="{DataTemplate views:CustomerListPage}" Route="customers" />
+        </Tab>
+        
+        <Tab Title="Payments Record" Icon="payrollcheck.png">
+            <ShellContent ContentTemplate="{DataTemplate views:PaymentListPage}" Route="payments" />
+        </Tab>
+    </FlyoutItem>
+
+    <!-- Flyout menu for secondary options - Only visible to managers -->
+    <FlyoutItem Title="Stock" Icon="product.png" Route="stock">
+        <ShellContent ContentTemplate="{DataTemplate views:StockListPage}" />
+    </FlyoutItem>
+    
+    <FlyoutItem Title="Staff" Icon="group.png" Route="staff">
+        <ShellContent ContentTemplate="{DataTemplate views:StaffListPage}" />
+    </FlyoutItem>
+    
+    <FlyoutItem Title="Suppliers" Icon="parcel.png" Route="suppliers">
+        <ShellContent ContentTemplate="{DataTemplate views:SupplierListPage}" />
+    </FlyoutItem>
+    
+    <FlyoutItem Title="Dashboard" Icon="dashboard123.png" Route="dashboard">
+        <ShellContent ContentTemplate="{DataTemplate views:DashboardPage}" />
+    </FlyoutItem>
+    
+    <FlyoutItem Title="Menu" Icon="menu123.png" Route="menu">
+        <ShellContent ContentTemplate="{DataTemplate views:MenuItemListPage}" />
+    </FlyoutItem>
+    
+    <FlyoutItem Title="Reports" Icon="report.png" Route="reports">
+        <ShellContent ContentTemplate="{DataTemplate views:ReportsPage}" />
+    </FlyoutItem>
+    
+    <!-- User Management - Only visible to managers -->
+    <FlyoutItem Title="User Management" Icon="profile.png" Route="users" IsVisible="{Binding IsManager}">
+        <ShellContent ContentTemplate="{DataTemplate views:UserManagementPage}" />
+    </FlyoutItem>
+    
+    <!-- Account management items - Available to all authenticated users -->
+    <MenuItem Text="Change Password" 
+              IconImageSource="padlock.png"
+              Command="{Binding ChangePasswordCommand}"/>
+              
+    <MenuItem Text="Logout"
+              IconImageSource="logout.png"
+              Command="{Binding LogoutCommand}"/>
+              
+    <!-- FlyoutFooter to display current user info -->
+    <Shell.FlyoutFooter>
+        <Grid Padding="20" ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto">
+            <!-- User avatar/icon -->
+            <Image Grid.RowSpan="2" 
+                   Source="user.png" 
+                   HeightRequest="32" 
+                   WidthRequest="32" 
+                   VerticalOptions="Start" 
+                   HorizontalOptions="Start"
+                   Margin="0,0,10,0"/>
+            
+            <!-- Username -->
+            <Label Grid.Column="1" Grid.Row="0" 
+                   Text="{Binding Source={x:Static local:App.AuthService}, Path=CurrentUser.Username}" 
+                   FontAttributes="Bold" FontSize="16" />
+                   
+            <!-- User role -->
+            <Label Grid.Column="1" Grid.Row="1" 
+                   Text="{Binding Source={x:Static local:App.AuthService}, Path=CurrentUser.Role}" 
+                   FontSize="14" TextColor="#95FFFFFF" />
+                   
+            <!-- Divider line -->
+            <BoxView Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" 
+                     HeightRequest="1" BackgroundColor="#B4FFFFFF" 
+                     Margin="0,10,0,0" />
+        </Grid>
+    </Shell.FlyoutFooter>
+</Shell>

@@ -1,0 +1,221 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- DashboardPage.xaml -->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StockApplication.Views.DashboardPage"
+             Title="Dashboard">
+    
+    <Grid RowDefinitions="Auto,*,Auto" Padding="15">
+        <!-- Header -->
+        <VerticalStackLayout Grid.Row="0" Margin="0,10,0,20">
+            <Label Text="Stock Management Dashboard" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   TextColor="#3F51B5"/>
+            <Label Text="Overview of your inventory and activities" 
+                   FontSize="14" 
+                   TextColor="#757575"
+                   Margin="0,5,0,0"/>
+        </VerticalStackLayout>
+        
+        <!-- Dashboard Content -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="20">
+                <!-- Summary Cards -->
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
+                    <!-- Total Stock Card -->
+                    <Frame Grid.Column="0" 
+                           CornerRadius="10" 
+                           BorderColor="Transparent" 
+                           HasShadow="True"
+                           BackgroundColor="#E3F2FD">
+                        <VerticalStackLayout>
+                            <Label Text="Total Stock Items" 
+                                   FontSize="16" 
+                                   FontAttributes="Bold"
+                                   TextColor="#1976D2"/>
+                            <Label x:Name="TotalStockLabel" 
+                                   Text="0" 
+                                   FontSize="32" 
+                                   FontAttributes="Bold"
+                                   TextColor="#1565C0"
+                                   Margin="0,10,0,0"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                    
+                    <!-- Low Stock Card -->
+                    <Frame Grid.Column="1" 
+                           CornerRadius="10" 
+                           BorderColor="Transparent" 
+                           HasShadow="True"
+                           BackgroundColor="#FFEBEE">
+                        <VerticalStackLayout>
+                            <Label Text="Low Stock Alert" 
+                                   FontSize="16" 
+                                   FontAttributes="Bold"
+                                   TextColor="#D32F2F"/>
+                            <Label x:Name="LowStockLabel" 
+                                   Text="0" 
+                                   FontSize="32" 
+                                   FontAttributes="Bold"
+                                   TextColor="#C62828"
+                                   Margin="0,10,0,0"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                </Grid>
+                
+                <!-- Recent Updates Section -->
+                <Frame CornerRadius="10" 
+                       BorderColor="Transparent" 
+                       HasShadow="True"
+                       Padding="15"
+                       Margin="0,10,0,0">
+                    <VerticalStackLayout>
+                        <Label Text="Recent Updates" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="#3F51B5"
+                               Margin="0,0,0,10"/>
+                        
+                        <CollectionView x:Name="RecentUpdatesCollection" 
+                                       HeightRequest="200"
+                                       EmptyView="No recent updates">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Padding="5" ColumnDefinitions="Auto,*,Auto">
+                                        <Ellipse Grid.Column="0"
+                                               WidthRequest="10"
+                                               HeightRequest="10"
+                                               Fill="#4CAF50"
+                                               VerticalOptions="Center"
+                                               Margin="0,0,10,0"/>
+                                        
+                                        <VerticalStackLayout Grid.Column="1">
+                                            <Label Text="{Binding Stock_Name}" 
+                                                   FontAttributes="Bold"
+                                                   TextColor="#212121"/>
+                                            <Label Text="{Binding UpdateMessage}" 
+                                                   FontSize="12"
+                                                   TextColor="#757575"/>
+                                        </VerticalStackLayout>
+                                        
+                                        <Label Grid.Column="2"
+                                               Text="{Binding UpdatedAt, StringFormat='{0:MM/dd/yyyy}'}"
+                                               FontSize="12"
+                                               TextColor="#9E9E9E"
+                                               VerticalOptions="Center"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Frame>
+                
+                <!-- Quick Actions Section -->
+                <Frame CornerRadius="10" 
+                       BorderColor="Transparent" 
+                       HasShadow="True"
+                       Padding="15"
+                       Margin="0,10,0,0">
+                    <VerticalStackLayout>
+                        <Label Text="Quick Actions" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="#3F51B5"
+                               Margin="0,0,0,10"/>
+                        
+                        <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" RowSpacing="15" ColumnSpacing="15">
+                            <!-- Add Stock Button -->
+                            <Button Grid.Row="0" Grid.Column="0"
+                                    Text="Add Stock"
+                                    BackgroundColor="#4CAF50"
+                                    TextColor="White"
+                                    CornerRadius="10"
+                                    x:Name="AddStockButton"/>
+                            
+                            <!-- Add Supplier Button -->
+                            <Button Grid.Row="0" Grid.Column="1"
+                                    Text="Add Supplier"
+                                    BackgroundColor="#2196F3"
+                                    TextColor="White"
+                                    CornerRadius="10"
+                                    x:Name="AddSupplierButton"/>
+                            
+                            <!-- Create Order Button -->
+                            <Button Grid.Row="1" Grid.Column="0"
+                                    Text="Create Order"
+                                    BackgroundColor="#FF9800"
+                                    TextColor="White"
+                                    CornerRadius="10"
+                                    x:Name="CreateOrderButton"/>
+                            
+                            <!-- View Reports Button -->
+                            <Button Grid.Row="1" Grid.Column="1"
+                                    Text="View Reports"
+                                    BackgroundColor="#9C27B0"
+                                    TextColor="White"
+                                    CornerRadius="10"
+                                    x:Name="ViewReportsButton"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+                
+                <!-- Expiring Soon Section -->
+                <Frame CornerRadius="10" 
+                       BorderColor="Transparent" 
+                       HasShadow="True"
+                       Padding="15"
+                       Margin="0,10,0,0">
+                    <VerticalStackLayout>
+                        <Label Text="Expiring Soon" 
+                               FontSize="18" 
+                               FontAttributes="Bold"
+                               TextColor="#3F51B5"
+                               Margin="0,0,0,10"/>
+                        
+                        <CollectionView x:Name="ExpiringItemsCollection" 
+                                      HeightRequest="150"
+                                      EmptyView="No items expiring soon">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Padding="5" ColumnDefinitions="*,Auto">
+                                        <VerticalStackLayout Grid.Column="0">
+                                            <Label Text="{Binding Stock_Name}" 
+                                                   FontAttributes="Bold"
+                                                   TextColor="#212121"/>
+                                            <Label Text="{Binding ExpiryDate, StringFormat='Expires: {0:MM/dd/yyyy}'}" 
+                                                   FontSize="12"
+                                                   TextColor="#FF5722"/>
+                                        </VerticalStackLayout>
+                                        
+                                        <Button Grid.Column="1"
+                                                Text="Details"
+                                                FontSize="12"
+                                                BackgroundColor="#E0E0E0"
+                                                TextColor="#212121"
+                                                CornerRadius="5"
+                                                WidthRequest="80"
+                                                HeightRequest="30"
+                                                Padding="5,0"
+                                                VerticalOptions="Center"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Frame>
+            </VerticalStackLayout>
+        </ScrollView>
+        
+        <!-- Footer/Status Bar -->
+        <StackLayout Grid.Row="2" 
+                     Orientation="Horizontal" 
+                     HorizontalOptions="Center"
+                     Margin="0,20,0,10">
+            <Label x:Name="StatusLabel" 
+                   Text="Last updated: Not available" 
+                   FontSize="12" 
+                   TextColor="#757575"/>
+        </StackLayout>
+    </Grid>
+</ContentPage>
