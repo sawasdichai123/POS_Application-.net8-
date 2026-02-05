@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StockApplication.Views.UserEditPage"
+             Title="{Binding Title}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            <!-- User information section -->
+            <Frame Padding="20" BorderColor="#E0E0E0" HasShadow="False" CornerRadius="10">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="User Information" FontSize="18" FontAttributes="Bold" TextColor="#3F51B5"/>
+                    
+                    <!-- Username -->
+                    <VerticalStackLayout>
+                        <Label Text="Username *" FontSize="14" TextColor="#616161"/>
+                        <Frame Padding="5" HasShadow="False" BorderColor="#E0E0E0" CornerRadius="5">
+                            <Entry x:Name="UsernameEntry" 
+                                   Text="{Binding Username}" 
+                                   Placeholder="Enter username"
+                                   IsEnabled="{Binding IsNewUser}"/>
+                        </Frame>
+                    </VerticalStackLayout>
+                    
+                    <!-- Role -->
+                    <VerticalStackLayout>
+                        <Label Text="Role *" FontSize="14" TextColor="#616161"/>
+                        <Frame Padding="5" HasShadow="False" BorderColor="#E0E0E0" CornerRadius="5">
+                            <Picker x:Name="RolePicker" 
+                                    SelectedItem="{Binding Role}"
+                                    Title="Select role">
+                                <Picker.ItemsSource>
+                                    <x:Array Type="{x:Type x:String}">
+                                        <x:String>Manager</x:String>
+                                        <x:String>Staff</x:String>
+                                    </x:Array>
+                                </Picker.ItemsSource>
+                            </Picker>
+                        </Frame>
+                    </VerticalStackLayout>
+                    
+                    <!-- Associated Staff -->
+                    <VerticalStackLayout>
+                        <Label Text="Link to Staff Member" FontSize="14" TextColor="#616161"/>
+                        <Frame Padding="5" HasShadow="False" BorderColor="#E0E0E0" CornerRadius="5">
+                            <Picker x:Name="StaffPicker" 
+                                    SelectedItem="{Binding SelectedStaff}"
+                                    ItemsSource="{Binding StaffList}"
+                                    ItemDisplayBinding="{Binding Staff_name}"
+                                    Title="Select staff member (if applicable)"
+                                    IsEnabled="{Binding CanChangeStaffLink}"/>
+                        </Frame>
+                        <Label Text="Linking a user to a staff member allows them to access the system" 
+                               FontSize="12" TextColor="#757575" Margin="5,5,0,0"/>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+            
+            <!-- Password section -->
+            <Frame Padding="20" BorderColor="#E0E0E0" HasShadow="False" CornerRadius="10">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="{Binding PasswordSectionTitle}" FontSize="18" FontAttributes="Bold" TextColor="#3F51B5"/>
+                    
+                    <!-- Current password (for editing) -->
+                    <VerticalStackLayout IsVisible="{Binding IsEditMode}">
+                        <Label Text="Current Password" FontSize="14" TextColor="#616161"/>
+                        <Frame Padding="5" HasShadow="False" BorderColor="#E0E0E0" CornerRadius="5">
+                            <Entry x:Name="CurrentPasswordEntry" 
+                                   Text="{Binding CurrentPassword}" 
+                                   Placeholder="Enter current password"
+                                   IsPassword="True"/>
+                            <Frame.Triggers>
+                                <DataTrigger TargetType="Frame" 
+                                             Binding="{Binding Path=IsVisible}" 
+                                             Value="False">
+                                    <Setter Property="Height" Value="0" />
+                                </DataTrigger>
+                            </Frame.Triggers>
+                        </Frame>
+                    </VerticalStackLayout>
+                    
+                    <!-- New password -->
+                    <VerticalStackLayout>
+                        <Label Text="{Binding PasswordEntryLabel}" FontSize="14" TextColor="#616161"/>
+                        <Frame Padding="5" HasShadow="False" BorderColor="#E0E0E0" CornerRadius="5">
+                            <Entry x:Name="PasswordEntry" 
+                                   Text="{Binding Password}" 
+                                   Placeholder="Enter password"
+                                   IsPassword="True"/>
+                        </Frame>
+                    </VerticalStackLayout>
+                    
+                    <!-- Confirm password -->
+                    <VerticalStackLayout>
+                        <Label Text="Confirm Password" FontSize="14" TextColor="#616161"/>
+                        <Frame Padding="5" HasShadow="False" BorderColor="#E0E0E0" CornerRadius="5">
+                            <Entry x:Name="ConfirmPasswordEntry" 
+                                   Text="{Binding ConfirmPassword}" 
+                                   Placeholder="Confirm password"
+                                   IsPassword="True"/>
+                        </Frame>
+                    </VerticalStackLayout>
+                    
+                    <!-- Password requirements -->
+                    <Frame BackgroundColor="#F5F5F5" BorderColor="Transparent" Padding="10" HasShadow="False">
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="Password Requirements:" FontSize="12" TextColor="#616161" FontAttributes="Bold"/>
+                            <Label Text="• At least 8 characters" FontSize="12" TextColor="#757575"/>
+                            <Label Text="• Include letters, numbers, and special characters for better security" 
+                                   FontSize="12" TextColor="#757575"/>
+                        </VerticalStackLayout>
+                    </Frame>
+                </VerticalStackLayout>
+            </Frame>
+            
+            <!-- Account Status -->
+            <Frame Padding="15" BorderColor="#E0E0E0" HasShadow="False" CornerRadius="10">
+                <VerticalStackLayout>
+                    <Label Text="Account Status" FontSize="16" FontAttributes="Bold" TextColor="#3F51B5" Margin="0,0,0,10"/>
+                    <HorizontalStackLayout>
+                        <CheckBox x:Name="IsActiveCheckBox" IsChecked="{Binding IsActive}"/>
+                        <Label Text="Account is active" FontSize="14" TextColor="#616161" VerticalOptions="Center">
+                            <Label.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnStatusLabelTapped"/>
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </HorizontalStackLayout>
+                    <Label Text="Inactive accounts cannot log into the system" 
+                           FontSize="12" TextColor="#757575" Margin="30,0,0,0"/>
+                </VerticalStackLayout>
+            </Frame>
+            
+            <!-- Error message -->
+            <Label x:Name="ErrorLabel" 
+                   Text="{Binding ErrorMessage}" 
+                   TextColor="#F44336"
+                   IsVisible="{Binding HasError}"/>
+            
+            <!-- Buttons -->
+            <HorizontalStackLayout Spacing="15" HorizontalOptions="Center">
+                <Button Text="Cancel" 
+                        BackgroundColor="#9E9E9E" 
+                        TextColor="White"
+                        Padding="15,10"
+                        CornerRadius="5"
+                        Clicked="OnCancelClicked"/>
+                
+                <Button Text="Save" 
+                        BackgroundColor="#4CAF50" 
+                        TextColor="White"
+                        Padding="25,10"
+                        CornerRadius="5"
+                        Clicked="OnSaveClicked"/>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

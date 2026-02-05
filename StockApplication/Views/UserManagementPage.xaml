@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:converters="clr-namespace:StockApplication.Converters"
+             x:Class="StockApplication.Views.UserManagementPage"
+             Title="User Management">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:BoolToColorConverter x:Key="BoolToColorConverter" TrueColor="#4CAF50" FalseColor="#F44336" />
+            <converters:BoolToStringConverter x:Key="BoolToStatusConverter" TrueValue="Active" FalseValue="Inactive" />
+            <converters:NullToBoolConverter x:Key="NullToBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <Grid RowDefinitions="Auto,*,Auto" Padding="20">
+        <!-- Header -->
+        <VerticalStackLayout Grid.Row="0" Spacing="10" Margin="0,0,0,10">
+            <Label Text="User Management" FontSize="24" FontAttributes="Bold" TextColor="#3F51B5"/>
+            <Label Text="Manage user accounts and system access roles" FontSize="14" TextColor="#757575"/>
+            
+            <Grid ColumnDefinitions="*,Auto" Margin="0,10,0,0">
+                <SearchBar Grid.Column="0" x:Name="SearchBar" Placeholder="Search users..." 
+                           TextChanged="OnSearchTextChanged"/>
+                <Button Grid.Column="1" Text="Add User" BackgroundColor="#4CAF50" TextColor="White"
+                        Clicked="OnAddUserClicked" Margin="10,0,0,0"/>
+            </Grid>
+        </VerticalStackLayout>
+        
+        <!-- User List -->
+        <RefreshView Grid.Row="1" x:Name="UsersRefreshView" IsRefreshing="{Binding IsRefreshing}" Command="{Binding RefreshCommand}">
+            <CollectionView x:Name="UsersCollectionView" ItemsSource="{Binding Users}"
+                            SelectionMode="Single" SelectionChanged="OnUserSelected">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Margin="0,5" Padding="15" BorderColor="#E0E0E0" HasShadow="False">
+                            <Grid ColumnDefinitions="Auto,*,Auto">
+                                <!-- Status indicator -->
+                                <Ellipse Grid.Column="0" WidthRequest="12" HeightRequest="12" 
+                                         Fill="{Binding IsActive, Converter={StaticResource BoolToColorConverter}}" 
+                                         VerticalOptions="Center"/>
+                                
+                                <!-- User info -->
+                                <VerticalStackLayout Grid.Column="1" Margin="15,0">
+                                    <Label Text="{Binding Username}" FontAttributes="Bold" FontSize="16"/>
+                                    <Grid ColumnDefinitions="Auto,*" Margin="0,5,0,0">
+                                        <Label Text="Role: " FontSize="14" TextColor="#757575"/>
+                                        <Label Grid.Column="1" Text="{Binding Role}" FontSize="14" TextColor="#757575" FontAttributes="Bold"/>
+                                    </Grid>
+                                    
+                                    <Grid ColumnDefinitions="Auto,*" IsVisible="{Binding StaffName, Converter={StaticResource NullToBoolConverter}}">
+                                        <Label Text="Staff: " FontSize="14" TextColor="#757575"/>
+                                        <Label Grid.Column="1" Text="{Binding StaffName}" FontSize="14" TextColor="#757575"/>
+                                    </Grid>
+                                    
+                                    <Label Text="{Binding LastLogin, StringFormat='Last login: {0:g}'}" 
+                                           FontSize="12" TextColor="#9E9E9E" IsVisible="{Binding LastLogin, Converter={StaticResource NullToBoolConverter}}"/>
+                                </VerticalStackLayout>
+                                
+                                <!-- Actions -->
+                                <HorizontalStackLayout Grid.Column="2" Spacing="10" VerticalOptions="Center">
+                                    <Button Text="Edit" FontSize="12" BackgroundColor="#FFC107" TextColor="White"
+                                            Padding="10,5" CornerRadius="5" 
+                                            CommandParameter="{Binding .}" Clicked="OnEditUserClicked"/>
+                                    <Button Text="{Binding IsActive, Converter={StaticResource BoolToStatusConverter}, ConverterParameter=Invert}" 
+                                            FontSize="12" 
+                                            BackgroundColor="{Binding IsActive, Converter={StaticResource BoolToColorConverter}, ConverterParameter=Invert}" 
+                                            TextColor="White" Padding="10,5" CornerRadius="5"
+                                            CommandParameter="{Binding .}" Clicked="OnToggleUserStatusClicked"/>
+                                    <!-- Delete Button -->
+                                    <Button Text="Delete" FontSize="12" BackgroundColor="#F44336" TextColor="White"
+                                            Padding="10,5" CornerRadius="5"
+                                            CommandParameter="{Binding .}" Clicked="OnDeleteUserClicked"
+                                            IsVisible="{Binding CanBeDeleted}"/>
+                                </HorizontalStackLayout>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.EmptyView>
+                    <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                        <Image Source="empty_list.png" HeightRequest="100" Opacity="0.5"/>
+                        <Label Text="No users found" FontSize="18" TextColor="#9E9E9E" Margin="0,20,0,0"/>
+                        <Label Text="Add a new user or change your search criteria" FontSize="14" TextColor="#BDBDBD"/>
+                    </VerticalStackLayout>
+                </CollectionView.EmptyView>
+            </CollectionView>
+        </RefreshView>
+        
+        <!-- Profile Section for Current User -->
+        <Frame Grid.Row="2" BorderColor="#E0E0E0" HasShadow="False" Padding="15" Margin="0,10,0,0">
+            <Grid ColumnDefinitions="Auto,*,Auto">
+                <Image Source="user.png" WidthRequest="48" HeightRequest="48" VerticalOptions="Center"/>
+                
+                <VerticalStackLayout Grid.Column="1" Margin="15,0" VerticalOptions="Center">
+                    <Label Text="Your Account" FontAttributes="Bold" FontSize="16"/>
+                    <Label Text="{Binding CurrentUser.Username}" FontSize="14"/>
+                    <Label Text="{Binding CurrentUser.Role}" FontSize="12" TextColor="#757575"/>
+                </VerticalStackLayout>
+                
+                <Button Grid.Column="2" Text="Change Password" 
+                        BackgroundColor="#3F51B5" TextColor="White"
+                        FontSize="12" Padding="10,5" CornerRadius="5"
+                        Clicked="OnChangePasswordClicked"
+                        VerticalOptions="Center"/>
+            </Grid>
+        </Frame>
+    </Grid>
+</ContentPage>

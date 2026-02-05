@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StockApplication.Views.StaffEditPage"
+             Title="Edit Staff"
+             BackgroundColor="#F5F8FA">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            <!-- Header -->
+            <Label x:Name="PageTitleLabel" 
+                   Text="Add New Staff Member" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   TextColor="#3F51B5"/>
+            
+            <!-- Form Section -->
+            <Frame Padding="20" 
+                   CornerRadius="12" 
+                   BorderColor="Transparent" 
+                   BackgroundColor="White"
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="16">
+                    <!-- Staff Name -->
+                    <VerticalStackLayout>
+                        <Grid ColumnDefinitions="*,Auto" Margin="0,0,0,4">
+                            <Label Grid.Column="0"
+                                   Text="Staff Name" 
+                                   FontSize="14" 
+                                   FontAttributes="Bold"
+                                   TextColor="#616161"/>
+                            <Label Grid.Column="1"
+                                   Text="Required" 
+                                   FontSize="12" 
+                                   TextColor="#F44336"/>
+                        </Grid>
+                        <Frame Padding="0" 
+                               HasShadow="False" 
+                               BorderColor="#E0E0E0"
+                               BackgroundColor="White"
+                               CornerRadius="6">
+                            <Entry x:Name="StaffNameEntry" 
+                                   Placeholder="Enter staff name"
+                                   PlaceholderColor="#BDBDBD"
+                                   Margin="10,0"/>
+                        </Frame>
+                    </VerticalStackLayout>
+                    
+                    <!-- Position Picker -->
+                    <VerticalStackLayout>
+                        <Label Text="Position" 
+                               FontSize="14" 
+                               FontAttributes="Bold"
+                               TextColor="#616161"
+                               Margin="0,0,0,4"/>
+                        <Frame Padding="0" 
+                               HasShadow="False" 
+                               BorderColor="#E0E0E0"
+                               BackgroundColor="White"
+                               CornerRadius="6">
+                            <Picker x:Name="PositionPicker" 
+                                    Title="Select position"
+                                    TitleColor="#BDBDBD"
+                                    Margin="10,0"/>
+                        </Frame>
+                    </VerticalStackLayout>
+                    
+                    <!-- Phone -->
+                    <VerticalStackLayout>
+                        <Label Text="Phone" 
+                               FontSize="14" 
+                               FontAttributes="Bold"
+                               TextColor="#616161"
+                               Margin="0,0,0,4"/>
+                        <Frame Padding="0" 
+                               HasShadow="False" 
+                               BorderColor="#E0E0E0"
+                               BackgroundColor="White"
+                               CornerRadius="6">
+                            <Entry x:Name="PhoneEntry" 
+                                   Placeholder="Enter phone number"
+                                   PlaceholderColor="#BDBDBD"
+                                   Keyboard="Telephone"
+                                   Margin="10,0"/>
+                        </Frame>
+                    </VerticalStackLayout>
+                    
+                    <!-- Salary with Thai Baht and increment/decrement buttons -->
+                    <VerticalStackLayout>
+                        <Label Text="Salary" 
+                               FontSize="14" 
+                               FontAttributes="Bold"
+                               TextColor="#616161"
+                               Margin="0,0,0,4"/>
+                        <Grid ColumnDefinitions="Auto,*,Auto,Auto">
+                            <!-- Currency Symbol -->
+                            <Frame Grid.Column="0"
+                                   Padding="10,0" 
+                                   HasShadow="False" 
+                                   BorderColor="#E0E0E0"
+                                   BackgroundColor="#F5F5F5"
+                                   CornerRadius="6">
+                                <Label Text="฿" 
+                                       FontSize="16" 
+                                       TextColor="#616161"
+                                       VerticalOptions="Center"
+                                       HorizontalOptions="Center"/>
+                            </Frame>
+                            
+                            <!-- Amount Entry -->
+                            <Frame Grid.Column="1"
+                                   Padding="0" 
+                                   HasShadow="False" 
+                                   BorderColor="#E0E0E0"
+                                   BackgroundColor="White"
+                                   CornerRadius="6">
+                                <Entry x:Name="SalaryEntry" 
+                                       Placeholder="0.00"
+                                       PlaceholderColor="#BDBDBD"
+                                       Keyboard="Numeric"
+                                       Margin="10,0"/>
+                            </Frame>
+                            
+                            <!-- Decrement Button -->
+                            <Button Grid.Column="2"
+                                    Text="-"
+                                    FontSize="20"
+                                    BackgroundColor="#E0E0E0"
+                                    TextColor="#616161"
+                                    CornerRadius="6"
+                                    HeightRequest="40"
+                                    WidthRequest="40"
+                                    Margin="5,0,0,0"
+                                    x:Name="DecrementSalaryButton"
+                                    Clicked="OnDecrementSalaryClicked"/>
+                            
+                            <!-- Increment Button -->
+                            <Button Grid.Column="3"
+                                    Text="+"
+                                    FontSize="20"
+                                    BackgroundColor="#E0E0E0"
+                                    TextColor="#616161"
+                                    CornerRadius="6"
+                                    HeightRequest="40"
+                                    WidthRequest="40"
+                                    Margin="5,0,0,0"
+                                    x:Name="IncrementSalaryButton"
+                                    Clicked="OnIncrementSalaryClicked"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                    
+                    <!-- Hire Date -->
+                    <VerticalStackLayout>
+                        <Label Text="Hire Date" 
+                               FontSize="14" 
+                               FontAttributes="Bold"
+                               TextColor="#616161"
+                               Margin="0,0,0,4"/>
+                        <Frame Padding="0" 
+                               HasShadow="False" 
+                               BorderColor="#E0E0E0"
+                               BackgroundColor="White"
+                               CornerRadius="6">
+                            <DatePicker x:Name="HireDatePicker" 
+                                        Format="MMM dd, yyyy"
+                                        Margin="10,0"/>
+                        </Frame>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+            
+            <!-- Action Buttons -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="15" Margin="0,10,0,20">
+                <Button Grid.Column="0"
+                        Text="Cancel"
+                        BackgroundColor="#E0E0E0"
+                        TextColor="#616161"
+                        CornerRadius="8"
+                        HeightRequest="46"
+                        FontAttributes="Bold"
+                        x:Name="CancelButton"/>
+                
+                <Button Grid.Column="1"
+                        Text="Save"
+                        BackgroundColor="#4CAF50"
+                        TextColor="White"
+                        CornerRadius="8"
+                        HeightRequest="46"
+                        FontAttributes="Bold"
+                        x:Name="SaveButton"/>
+            </Grid>
+            
+            <!-- Required Fields Note -->
+            <Label Text="Required fields are indicated"
+                   FontSize="12" 
+                   TextColor="#9E9E9E"
+                   HorizontalOptions="Center"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

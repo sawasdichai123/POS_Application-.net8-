@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+          xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+          x:Class="StockApplication.Views.MenuItemListPage"
+          Title="Menu Items">
+
+<Grid RowDefinitions="Auto,*,Auto" Padding="15">
+    <!-- Header -->
+    <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,10,0,20">
+        <VerticalStackLayout Grid.Column="0">
+            <Label Text="Menu Items" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   TextColor="#3F51B5"/>
+            <Label Text="Manage your food and beverage menu" 
+                   FontSize="14" 
+                   TextColor="#757575"
+                   Margin="0,5,0,0"/>
+        </VerticalStackLayout>
+        
+        <Button Grid.Column="1"
+                Text="+ Add Item"
+                BackgroundColor="#4CAF50"
+                TextColor="White"
+                CornerRadius="10"
+                HeightRequest="40"
+                VerticalOptions="Center"
+                x:Name="AddMenuItemButton"/>
+    </Grid>
+    
+    <!-- Filter and Search -->
+    <Grid Grid.Row="1" RowDefinitions="Auto,*">
+        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto" Margin="0,0,0,15">
+            <!-- Search Bar -->
+            <Frame Grid.Row="0" Grid.Column="0"
+                   Padding="15,0"
+                   CornerRadius="10"
+                   BorderColor="#E0E0E0"
+                   HasShadow="False">
+                <Entry Placeholder="Search menu items..."
+                       PlaceholderColor="#9E9E9E"
+                       x:Name="SearchEntry"
+                       VerticalOptions="Center"
+                       ClearButtonVisibility="WhileEditing"/>
+            </Frame>
+            
+            <!-- Filter Button -->
+            <Button Grid.Row="0" Grid.Column="1"
+                    Text="Filter"
+                    BackgroundColor="#3F51B5"
+                    TextColor="White"
+                    CornerRadius="10"
+                    Margin="10,0,0,0"
+                    WidthRequest="80"
+                    x:Name="FilterButton"/>
+            
+            <!-- Category Filter Buttons - UPDATED WITH SCROLLVIEW -->
+            <ScrollView Grid.Row="1" Grid.ColumnSpan="2"
+                       Orientation="Horizontal"
+                       HorizontalScrollBarVisibility="Never"
+                       Margin="0,10,0,0">
+                <HorizontalStackLayout Spacing="10">
+                    <Button Text="All"
+                            BackgroundColor="#3F51B5"
+                            TextColor="White"
+                            CornerRadius="5"
+                            HeightRequest="35"
+                            WidthRequest="60"
+                            x:Name="AllCategoryButton"/>
+                    
+                    <Button Text="Main"
+                            BackgroundColor="#E0E0E0"
+                            TextColor="#616161"
+                            CornerRadius="5"
+                            HeightRequest="35"
+                            WidthRequest="70"
+                            x:Name="MainCategoryButton"/>
+                    
+                    <Button Text="Side"
+                            BackgroundColor="#E0E0E0"
+                            TextColor="#616161"
+                            CornerRadius="5"
+                            HeightRequest="35"
+                            WidthRequest="60"
+                            x:Name="SideCategoryButton"/>
+                    
+                    <Button Text="Dessert"
+                            BackgroundColor="#E0E0E0"
+                            TextColor="#616161"
+                            CornerRadius="5"
+                            HeightRequest="35"
+                            WidthRequest="80"
+                            x:Name="DessertCategoryButton"/>
+                    
+                    <Button Text="Beverage"
+                            BackgroundColor="#E0E0E0"
+                            TextColor="#616161"
+                            CornerRadius="5"
+                            HeightRequest="35"
+                            WidthRequest="90"
+                            x:Name="BeverageCategoryButton"/>
+                    
+                    <Button Text="Other"
+                            BackgroundColor="#E0E0E0"
+                            TextColor="#616161"
+                            CornerRadius="5"
+                            HeightRequest="35"
+                            WidthRequest="70"
+                            x:Name="OtherCategoryButton"/>
+                </HorizontalStackLayout>
+            </ScrollView>
+        </Grid>
+        
+        <!-- Menu Items List -->
+        <RefreshView Grid.Row="1" x:Name="MenuRefreshView">
+            <CollectionView x:Name="MenuItemsCollection"
+                           SelectionMode="Single">
+                <CollectionView.EmptyView>
+                    <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                        <Image Source="empty_menu.png" 
+                               HeightRequest="100" 
+                               WidthRequest="100"
+                               Opacity="0.5"
+                               Margin="0,0,0,20"/>
+                        <Label Text="No menu items found" 
+                               FontSize="18" 
+                               TextColor="#9E9E9E"
+                               HorizontalOptions="Center"/>
+                        <Label Text="Add your first menu item to get started" 
+                               FontSize="14" 
+                               TextColor="#BDBDBD"
+                               HorizontalOptions="Center"/>
+                    </StackLayout>
+                </CollectionView.EmptyView>
+                
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Margin="0,5,0,10"
+                               Padding="15"
+                               CornerRadius="10"
+                               BorderColor="Transparent"
+                               HasShadow="True">
+                            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto">
+                                <!-- Item Name and Category -->
+                                <Grid Grid.Row="0" Grid.Column="0" ColumnDefinitions="*,Auto">
+                                    <Label Grid.Column="0"
+                                           Text="{Binding Menu_Name}" 
+                                           FontSize="18" 
+                                           FontAttributes="Bold"
+                                           TextColor="#212121"/>
+                                    
+                                    <Border Grid.Column="1"
+                                           Stroke="#E0E0E0"
+                                           StrokeThickness="1"
+                                           StrokeShape="RoundRectangle 10,10,10,10"
+                                           BackgroundColor="#F5F5F5"
+                                           Padding="8,3"
+                                           HorizontalOptions="End">
+                                        <Label Text="{Binding Category}"
+                                               FontSize="12"
+                                               TextColor="#616161"/>
+                                    </Border>
+                                </Grid>
+                                
+                                <!-- Description -->
+                                <Label Grid.Row="1" Grid.Column="0"
+                                       Text="{Binding Description}"
+                                       FontSize="14"
+                                       TextColor="#757575"
+                                       Margin="0,5,0,0"
+                                       LineBreakMode="TailTruncation"
+                                       MaxLines="2"/>
+                                
+                                <!-- Price -->
+                                <Border Grid.Row="0" Grid.RowSpan="2" Grid.Column="1"
+                                       Stroke="#E0E0E0"
+                                       StrokeThickness="1"
+                                       StrokeShape="RoundRectangle 10,10,10,10"
+                                       BackgroundColor="#E3F2FD"
+                                       Padding="10,5"
+                                       VerticalOptions="Center"
+                                       Margin="10,0,0,0">
+                                    <Label Text="{Binding Price, StringFormat='฿{0:F2}'}"
+                                           FontSize="16"
+                                           FontAttributes="Bold"
+                                           TextColor="#1976D2"
+                                           HorizontalOptions="Center"/>
+                                </Border>
+                                
+                                <!-- Divider -->
+                                <BoxView Grid.Row="2" Grid.ColumnSpan="2"
+                                        Color="#E0E0E0"
+                                        HeightRequest="1"
+                                        Margin="0,10"/>
+                                
+                                <!-- Action Buttons -->
+                                <HorizontalStackLayout Grid.Row="3" Grid.ColumnSpan="2"
+                                                     Spacing="10"
+                                                     HorizontalOptions="End">
+                                    <Button Text="Edit"
+                                            FontSize="12"
+                                            BackgroundColor="#2196F3"
+                                            TextColor="White"
+                                            CornerRadius="5"
+                                            HeightRequest="30"
+                                            WidthRequest="60"
+                                            Padding="0"
+                                            CommandParameter="{Binding .}"
+                                            Clicked="OnEditMenuItemClicked"/>
+                                    
+                                    <Button Text="Delete"
+                                            FontSize="12"
+                                            BackgroundColor="#F44336"
+                                            TextColor="White"
+                                            CornerRadius="5"
+                                            HeightRequest="30"
+                                            WidthRequest="60"
+                                            Padding="0"
+                                            CommandParameter="{Binding .}"
+                                            Clicked="OnDeleteMenuItemClicked"/>
+                                </HorizontalStackLayout>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+    </Grid>
+    
+    <!-- Footer/Status Bar -->
+    <StackLayout Grid.Row="2" 
+                 Orientation="Horizontal" 
+                 HorizontalOptions="Center"
+                 Margin="0,20,0,10">
+        <Label x:Name="TotalItemsLabel" 
+               Text="Total Menu Items: 0" 
+               FontSize="14" 
+               TextColor="#757575"/>
+    </StackLayout>
+</Grid>
+</ContentPage>

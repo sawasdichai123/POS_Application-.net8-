@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StockApplication.Views.StaffListPage"
+             xmlns:converters="clr-namespace:StockApplication.Converters"
+             Title="Staff Management"
+             BackgroundColor="#F5F8FA">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:BoolToColorConverter x:Key="BoolToColorConverter" TrueColor="#4CAF50" FalseColor="#F44336" />
+            <converters:NullToBoolConverter x:Key="NullToBoolConverter" />
+            <converters:BoolToStringConverter x:Key="BoolToStatusConverter" TrueValue="Active" FalseValue="Inactive" />
+            <converters:InverseBoolConverter x:Key="InverseBoolConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    
+    <Grid RowDefinitions="Auto,*,Auto" Padding="16">
+        <!-- Header -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,10,0,20">
+            <VerticalStackLayout Grid.Column="0">
+                <Label Text="Staff &amp; User Management" 
+                       FontSize="24" 
+                       FontAttributes="Bold" 
+                       TextColor="#3F51B5"/>
+                <Label Text="Manage your staff and system access" 
+                       FontSize="14" 
+                       TextColor="#757575"
+                       Margin="0,5,0,0"/>
+            </VerticalStackLayout>
+            
+            <Button Grid.Column="1"
+                    Text="+ Add Staff"
+                    BackgroundColor="#4CAF50"
+                    TextColor="White"
+                    CornerRadius="8"
+                    HeightRequest="44"
+                    WidthRequest="110"
+                    FontSize="14"
+                    VerticalOptions="Center"
+                    Clicked="OnAddStaffClicked"
+                    x:Name="AddStaffButton"/>
+        </Grid>
+        
+        <!-- Search Bar -->
+        <Grid Grid.Row="1" RowDefinitions="Auto,*">
+            <Frame Padding="0"
+                   CornerRadius="10"
+                   BorderColor="#E0E0E0"
+                   HasShadow="False"
+                   BackgroundColor="White"
+                   HeightRequest="50"
+                   Margin="0,0,0,20">
+                <Grid ColumnDefinitions="Auto,*">
+                    <Image Grid.Column="0"
+                           Source="search_icon.png"
+                           WidthRequest="20"
+                           HeightRequest="20"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           Margin="15,0"/>
+                    <Entry Grid.Column="1"
+                           Placeholder="Search by name, position, or phone..."
+                           PlaceholderColor="#9E9E9E"
+                           x:Name="SearchEntry"
+                           VerticalOptions="Center"
+                           TextChanged="OnSearchTextChanged"
+                           ClearButtonVisibility="WhileEditing"/>
+                </Grid>
+            </Frame>
+            
+            <!-- Staff List -->
+            <RefreshView Grid.Row="1" x:Name="StaffRefreshView" 
+                         IsRefreshing="{Binding IsLoading}"
+                         Command="{Binding RefreshCommand}">
+                <CollectionView x:Name="StaffCollectionView"
+                                ItemsSource="{Binding StaffList}"
+                                SelectionMode="Single"
+                                SelectionChanged="OnStaffSelectionChanged">
+                    <CollectionView.EmptyView>
+                        <Grid RowDefinitions="*,Auto,Auto,*" 
+                              VerticalOptions="Center" 
+                              Margin="20">
+                            <Image Grid.Row="1" 
+                                   Source="empty_contacts.png" 
+                                   HeightRequest="120" 
+                                   WidthRequest="120"
+                                   Opacity="0.6"
+                                   HorizontalOptions="Center"/>
+                            <Label Grid.Row="2" 
+                                   Text="No staff members found" 
+                                   FontSize="18" 
+                                   TextColor="#616161"
+                                   HorizontalOptions="Center"
+                                   Margin="0,20,0,5"/>
+                            <Label Grid.Row="3" 
+                                   Text="Add your first staff member to get started" 
+                                   FontSize="14" 
+                                   TextColor="#9E9E9E"
+                                   HorizontalOptions="Center"/>
+                        </Grid>
+                    </CollectionView.EmptyView>
+                    
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Margin="0,0,0,16"
+                                   Padding="0"
+                                   CornerRadius="12"
+                                   BorderColor="Transparent"
+                                   BackgroundColor="White"
+                                   HasShadow="True">
+                                <Grid RowDefinitions="Auto,Auto,Auto,Auto">
+                                    <!-- Header with Name, Position and Action Buttons -->
+                                    <Grid Grid.Row="0" 
+                                          ColumnDefinitions="*,Auto"
+                                          Padding="16,12"
+                                          BackgroundColor="#F8F9FA">
+                                        
+                                        <!-- Staff Name and Position -->
+                                        <Grid Grid.Column="0" ColumnDefinitions="Auto,*">
+                                            <!-- Status Indicator -->
+                                            <Ellipse Grid.Column="0" 
+                                                    WidthRequest="10" 
+                                                    HeightRequest="10"
+                                                    Fill="{Binding HasUserAccount, Converter={StaticResource BoolToColorConverter}}" 
+                                                    VerticalOptions="Center"
+                                                    Margin="0,0,10,0"/>
+                                            
+                                            <Label Grid.Column="1"
+                                                  Text="{Binding Staff_Name}" 
+                                                  FontSize="18" 
+                                                  FontAttributes="Bold"
+                                                  TextColor="#212121"
+                                                  VerticalOptions="Center"/>
+                                        </Grid>
+                                        
+                                        <!-- Action Buttons -->
+                                        <HorizontalStackLayout Grid.Column="1"
+                                                             Spacing="8"
+                                                             HorizontalOptions="End">
+                                            <Button Text="Edit"
+                                                    FontSize="12"
+                                                    BackgroundColor="#2196F3"
+                                                    TextColor="White"
+                                                    CornerRadius="6"
+                                                    HeightRequest="32"
+                                                    WidthRequest="60"
+                                                    Padding="0"
+                                                    CommandParameter="{Binding .}"
+                                                    Clicked="OnEditStaffClicked"/>
+                                            <Button Text="Manage"
+                                                    FontSize="12"
+                                                    BackgroundColor="#FF9800"
+                                                    TextColor="White"
+                                                    CornerRadius="6"
+                                                    HeightRequest="32"
+                                                    WidthRequest="70"
+                                                    Padding="0"
+                                                    CommandParameter="{Binding .}"
+                                                    Clicked="OnManageUserClicked"/>
+                                            <Button Text="Delete"
+                                                    FontSize="12"
+                                                    BackgroundColor="#F44336"
+                                                    TextColor="White"
+                                                    CornerRadius="6"
+                                                    HeightRequest="32"
+                                                    WidthRequest="60"
+                                                    Padding="0"
+                                                    CommandParameter="{Binding .}"
+                                                    Clicked="OnDeleteStaffClicked"/>
+                                        </HorizontalStackLayout>
+                                    </Grid>
+                                    
+                                    <!-- Staff Details -->
+                                    <Grid Grid.Row="1" Padding="16,8">
+                                        <!-- Phone -->
+                                        <Grid ColumnDefinitions="24,*" RowDefinitions="Auto,Auto,Auto">
+                                            <Image Grid.Row="0" Grid.Column="0" 
+                                                   Source="phone_icon.png"
+                                                   WidthRequest="16"
+                                                   HeightRequest="16"
+                                                   VerticalOptions="Center"/>
+                                            <Label Grid.Row="0" Grid.Column="1"
+                                                   Text="{Binding Staff_Phone}" 
+                                                   FontSize="14"
+                                                   TextColor="#616161"
+                                                   VerticalOptions="Center"/>
+                                            
+                                            <!-- Hire Date -->
+                                            <Image Grid.Row="1" Grid.Column="0" 
+                                                   Source="calendar_icon.png"
+                                                   WidthRequest="16"
+                                                   HeightRequest="16"
+                                                   VerticalOptions="Center"
+                                                   Margin="0,12,0,0"/>
+                                            <Label Grid.Row="1" Grid.Column="1"
+                                                   Text="{Binding HireDate, StringFormat='{0:MM/dd/yyyy}'}" 
+                                                   FontSize="14"
+                                                   TextColor="#616161"
+                                                   VerticalOptions="Center"
+                                                   Margin="0,12,0,0"/>
+                                            
+                                            <!-- Salary -->
+                                            <Image Grid.Row="2" Grid.Column="0" 
+                                                   Source="money_icon.png"
+                                                   WidthRequest="16"
+                                                   HeightRequest="16"
+                                                   VerticalOptions="Center"
+                                                   Margin="0,12,0,0"/>
+                                            <Label Grid.Row="2" Grid.Column="1"
+                                                   Text="{Binding Salary, StringFormat='${0:N2}'}" 
+                                                   FontSize="14"
+                                                   TextColor="#616161"
+                                                   VerticalOptions="Center"
+                                                   Margin="0,12,0,0"/>
+                                        </Grid>
+                                    </Grid>
+                                    
+                                    <!-- User Account Info (if exists) -->
+                                    <Frame Grid.Row="2" 
+                                           BorderColor="#E0E0E0" 
+                                           BackgroundColor="#F5F7FF"
+                                           Padding="16,12" 
+                                           CornerRadius="0"
+                                           HasShadow="False"
+                                           Margin="0"
+                                           IsVisible="{Binding HasUserAccount}">
+                                        <Grid RowDefinitions="Auto,Auto,Auto,Auto">
+                                            <Label Grid.Row="0"
+                                                   Text="System Access" 
+                                                   FontSize="15" 
+                                                   FontAttributes="Bold" 
+                                                   TextColor="#3F51B5"
+                                                   Margin="0,0,0,10"/>
+                                                   
+                                            <Grid Grid.Row="1" ColumnDefinitions="90,*" Margin="0,4,0,0">
+                                                <Label Grid.Column="0" 
+                                                       Text="Username:" 
+                                                       FontSize="13" 
+                                                       TextColor="#757575"
+                                                       VerticalOptions="Center"/>
+                                                <Label Grid.Column="1" 
+                                                       Text="{Binding AssociatedUser.Username}" 
+                                                       FontSize="13" 
+                                                       TextColor="#212121"
+                                                       VerticalOptions="Center"/>
+                                            </Grid>
+                                            
+                                            <Grid Grid.Row="2" ColumnDefinitions="90,*" Margin="0,8,0,0">
+                                                <Label Grid.Column="0" 
+                                                       Text="Role:" 
+                                                       FontSize="13" 
+                                                       TextColor="#757575"
+                                                       VerticalOptions="Center"/>
+                                                <Label Grid.Column="1" 
+                                                       Text="{Binding AssociatedUser.Role}" 
+                                                       FontSize="13" 
+                                                       TextColor="#212121"
+                                                       VerticalOptions="Center"/>
+                                            </Grid>
+                                            
+                                            <Grid Grid.Row="3" ColumnDefinitions="90,*" Margin="0,8,0,0">
+                                                <Label Grid.Column="0" 
+                                                       Text="Status:" 
+                                                       FontSize="13" 
+                                                       TextColor="#757575"
+                                                       VerticalOptions="Center"/>
+                                                <HorizontalStackLayout Grid.Column="1" VerticalOptions="Center">
+                                                    <Ellipse WidthRequest="8" 
+                                                             HeightRequest="8"
+                                                             Fill="{Binding AssociatedUser.IsActive, Converter={StaticResource BoolToColorConverter}}" 
+                                                             VerticalOptions="Center"
+                                                             Margin="0,0,6,0"/>
+                                                    <Label Text="{Binding AssociatedUser.IsActive, Converter={StaticResource BoolToStatusConverter}}" 
+                                                           FontSize="13"
+                                                           TextColor="{Binding AssociatedUser.IsActive, Converter={StaticResource BoolToColorConverter}}"
+                                                           VerticalOptions="Center"/>
+                                                </HorizontalStackLayout>
+                                            </Grid>
+                                        </Grid>
+                                    </Frame>
+                                    
+                                    <!-- Not Linked to System Message -->
+                                    <Frame Grid.Row="3"
+                                           BackgroundColor="#FFF8E1"
+                                           BorderColor="#FFE0B2"
+                                           CornerRadius="0"
+                                           Padding="16,12"
+                                           HasShadow="False"
+                                           IsVisible="{Binding HasUserAccount, Converter={StaticResource InverseBoolConverter}}">
+                                        <HorizontalStackLayout Spacing="8">
+                                            <Image Source="warning_icon.png"
+                                                   WidthRequest="16"
+                                                   HeightRequest="16"
+                                                   VerticalOptions="Center"/>
+                                            <Label Text="No system access account configured"
+                                                   FontSize="13"
+                                                   TextColor="#E65100"
+                                                   VerticalOptions="Center"/>
+                                        </HorizontalStackLayout>
+                                    </Frame>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </RefreshView>
+        </Grid>
+        
+        <!-- Footer/Status Bar -->
+        <Grid Grid.Row="2" ColumnDefinitions="*,Auto" Margin="0,10,0,0">
+            <HorizontalStackLayout Grid.Column="0" Spacing="5">
+                <Image Source="users_icon.png"
+                       WidthRequest="18"
+                       HeightRequest="18"
+                       VerticalOptions="Center"/>
+                <Label x:Name="TotalItemsLabel" 
+                       Text="Total Staff Members: 0" 
+                       FontSize="14" 
+                       TextColor="#757575"
+                       VerticalOptions="Center"/>
+            </HorizontalStackLayout>
+                   
+            <Button Grid.Column="1"
+                    Text="All Users"
+                    BackgroundColor="#3F51B5"
+                    TextColor="White"
+                    CornerRadius="8"
+                    HeightRequest="40"
+                    WidthRequest="100"
+                    Clicked="OnViewAllUsersClicked"/>
+        </Grid>
+    </Grid>
+</ContentPage>

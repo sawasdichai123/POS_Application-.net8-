@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StockApplication.Views.ReportsPage"
+             Title="Reports">
+    
+    <Grid RowDefinitions="Auto,*" Padding="15">
+        <!-- Header -->
+        <VerticalStackLayout Grid.Row="0" Margin="0,10,0,20">
+            <Label Text="Reports" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   TextColor="#3F51B5"/>
+            <Label Text="View reports and analytics" 
+                   FontSize="14" 
+                   TextColor="#757575"
+                   Margin="0,5,0,0"/>
+        </VerticalStackLayout>
+        
+        <!-- Report Options -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="20">
+                <!-- Stock Reports -->
+                <Frame Padding="20" 
+                       CornerRadius="10" 
+                       BorderColor="Transparent" 
+                       HasShadow="True">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="Stock Reports" 
+                               FontSize="18" 
+                               FontAttributes="Bold" 
+                               TextColor="#3F51B5"/>
+                        
+                        <Grid RowDefinitions="Auto,Auto,Auto" RowSpacing="15">
+                            <!-- Inventory Summary -->
+                            <Frame Grid.Row="0"
+                                   Padding="15"
+                                   CornerRadius="10"
+                                   BorderColor="#E0E0E0"
+                                   HasShadow="False">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <VerticalStackLayout Grid.Column="0">
+                                        <Label Text="Inventory Summary" 
+                                               FontSize="16" 
+                                               FontAttributes="Bold"
+                                               TextColor="#212121"/>
+                                        <Label Text="Overall stock levels and valuation" 
+                                               FontSize="14"
+                                               TextColor="#757575"/>
+                                    </VerticalStackLayout>
+                                    
+                                    <Button Grid.Column="1"
+                                            Text="View"
+                                            BackgroundColor="#3F51B5"
+                                            TextColor="White"
+                                            CornerRadius="5"
+                                            VerticalOptions="Center"
+                                            x:Name="InventorySummaryButton"/>
+                                </Grid>
+                            </Frame>
+                            
+                            <!-- Low Stock Report -->
+                            <Frame Grid.Row="1"
+                                   Padding="15"
+                                   CornerRadius="10"
+                                   BorderColor="#E0E0E0"
+                                   HasShadow="False">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <VerticalStackLayout Grid.Column="0">
+                                        <Label Text="Low Stock Report" 
+                                               FontSize="16" 
+                                               FontAttributes="Bold"
+                                               TextColor="#212121"/>
+                                        <Label Text="Items below minimum threshold" 
+                                               FontSize="14"
+                                               TextColor="#757575"/>
+                                    </VerticalStackLayout>
+                                    
+                                    <Button Grid.Column="1"
+                                            Text="View"
+                                            BackgroundColor="#F44336"
+                                            TextColor="White"
+                                            CornerRadius="5"
+                                            VerticalOptions="Center"
+                                            x:Name="LowStockButton"/>
+                                </Grid>
+                            </Frame>
+                            
+                            <!-- Expiry Report -->
+                            <Frame Grid.Row="2"
+                                   Padding="15"
+                                   CornerRadius="10"
+                                   BorderColor="#E0E0E0"
+                                   HasShadow="False">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <VerticalStackLayout Grid.Column="0">
+                                        <Label Text="Expiry Report" 
+                                               FontSize="16" 
+                                               FontAttributes="Bold"
+                                               TextColor="#212121"/>
+                                        <Label Text="Items nearing expiration" 
+                                               FontSize="14"
+                                               TextColor="#757575"/>
+                                    </VerticalStackLayout>
+                                    
+                                    <Button Grid.Column="1"
+                                            Text="View"
+                                            BackgroundColor="#FF9800"
+                                            TextColor="White"
+                                            CornerRadius="5"
+                                            VerticalOptions="Center"
+                                            x:Name="ExpiryReportButton"/>
+                                </Grid>
+                            </Frame>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+                
+                <!-- Sales Reports -->
+                <Frame Padding="20" 
+                       CornerRadius="10" 
+                       BorderColor="Transparent" 
+                       HasShadow="True">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="Sales Reports" 
+                               FontSize="18" 
+                               FontAttributes="Bold" 
+                               TextColor="#3F51B5"/>
+                        
+                        <Grid RowDefinitions="Auto,Auto" RowSpacing="15">
+                            <!-- Sales Summary -->
+                            <Frame Grid.Row="0"
+                                   Padding="15"
+                                   CornerRadius="10"
+                                   BorderColor="#E0E0E0"
+                                   HasShadow="False">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <VerticalStackLayout Grid.Column="0">
+                                        <Label Text="Sales Summary" 
+                                               FontSize="16" 
+                                               FontAttributes="Bold"
+                                               TextColor="#212121"/>
+                                        <Label Text="Revenue and order statistics" 
+                                               FontSize="14"
+                                               TextColor="#757575"/>
+                                    </VerticalStackLayout>
+                                    
+                                    <Button Grid.Column="1"
+                                            Text="View"
+                                            BackgroundColor="#4CAF50"
+                                            TextColor="White"
+                                            CornerRadius="5"
+                                            VerticalOptions="Center"
+                                            x:Name="SalesSummaryButton"/>
+                                </Grid>
+                            </Frame>
+                            
+                            <!-- Popular Items -->
+                            <Frame Grid.Row="1"
+                                   Padding="15"
+                                   CornerRadius="10"
+                                   BorderColor="#E0E0E0"
+                                   HasShadow="False">
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <VerticalStackLayout Grid.Column="0">
+                                        <Label Text="Popular Items" 
+                                               FontSize="16" 
+                                               FontAttributes="Bold"
+                                               TextColor="#212121"/>
+                                        <Label Text="Most frequently ordered items" 
+                                               FontSize="14"
+                                               TextColor="#757575"/>
+                                    </VerticalStackLayout>
+                                    
+                                    <Button Grid.Column="1"
+                                            Text="View"
+                                            BackgroundColor="#2196F3"
+                                            TextColor="White"
+                                            CornerRadius="5"
+                                            VerticalOptions="Center"
+                                            x:Name="PopularItemsButton"/>
+                                </Grid>
+                            </Frame>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+                
+                <!-- Export Options -->
+                <Frame Padding="20" 
+                       CornerRadius="10" 
+                       BorderColor="Transparent" 
+                       HasShadow="True">
+                    <VerticalStackLayout Spacing="15">
+                        <Label Text="Export Reports" 
+                               FontSize="18" 
+                               FontAttributes="Bold" 
+                               TextColor="#3F51B5"/>
+                        
+                        <Label Text="Export data in various formats" 
+                               FontSize="14"
+                               TextColor="#757575"/>
+                        
+                        <HorizontalStackLayout Spacing="15" HorizontalOptions="Center">
+                            <Button Text="CSV"
+                                    WidthRequest="100"
+                                    BackgroundColor="#795548"
+                                    TextColor="White"
+                                    CornerRadius="5"
+                                    x:Name="ExportCsvButton"/>
+                            
+                            <Button Text="PDF"
+                                    WidthRequest="100"
+                                    BackgroundColor="#E91E63"
+                                    TextColor="White"
+                                    CornerRadius="5"
+                                    x:Name="ExportPdfButton"/>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Frame>
+                
+                <!-- Coming Soon -->
+                <Frame Padding="20" 
+                       CornerRadius="10" 
+                       BorderColor="Transparent" 
+                       BackgroundColor="#F5F5F5"
+                       HasShadow="False">
+                    <VerticalStackLayout HorizontalOptions="Center">
+                        <Label Text="Advanced Analytics Coming Soon" 
+                               FontSize="16" 
+                               FontAttributes="Bold"
+                               TextColor="#757575"
+                               HorizontalOptions="Center"/>
+                        <Label Text="We're working on even more powerful reports and visualizations" 
+                               FontSize="14"
+                               TextColor="#9E9E9E"
+                               HorizontalOptions="Center"
+                               HorizontalTextAlignment="Center"/>
+                    </VerticalStackLayout>
+                </Frame>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+</ContentPage>

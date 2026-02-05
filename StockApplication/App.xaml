@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:StockApplication"
+             xmlns:converters="clr-namespace:StockApplication.Converters"
+             x:Class="StockApplication.App">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
+                <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
+            <!-- Application-wide colors -->
+            <Color x:Key="PrimaryColor">#3F51B5</Color>
+            <Color x:Key="PrimaryDarkColor">#303F9F</Color>
+            <Color x:Key="PrimaryLightColor">#C5CAE9</Color>
+            <Color x:Key="AccentColor">#4CAF50</Color>
+            <Color x:Key="TextPrimaryColor">#212121</Color>
+            <Color x:Key="TextSecondaryColor">#757575</Color>
+            <Color x:Key="DividerColor">#BDBDBD</Color>
+            <Color x:Key="WarningColor">#FF5722</Color>
+            <Color x:Key="ErrorColor">#F44336</Color>
+            <Color x:Key="SuccessColor">#4CAF50</Color>
+            <Color x:Key="InfoColor">#2196F3</Color>
+            <Color x:Key="BackgroundColor">#F5F5F5</Color>
+            <Color x:Key="SurfaceColor">#FFFFFF</Color>
+            
+            <!-- Register converters for user management -->
+            <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
+            <converters:NullToBoolConverter x:Key="NullToBoolConverter" />
+            <!-- <converters:BoolToActivationTextConverter x:Key="BoolToActivationTextConverter" />
+            <converters:BoolToActivationColorConverter x:Key="BoolToActivationColorConverter" /> -->
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

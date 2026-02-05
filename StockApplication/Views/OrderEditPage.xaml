@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:StockApplication.Views"
+             x:Class="StockApplication.Views.OrderEditPage"
+             Title="Edit Order">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            <!-- Header -->
+            <Label x:Name="PageTitleLabel" 
+                   Text="Create New Order" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   TextColor="#3F51B5"/>
+            
+            <!-- Order Details Section -->
+            <Frame Padding="20" 
+                   CornerRadius="10" 
+                   BorderColor="Transparent" 
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Order Information" 
+                           FontSize="18" 
+                           FontAttributes="Bold" 
+                           TextColor="#3F51B5"/>
+                    
+                    <!-- Staff Picker -->
+                    <VerticalStackLayout>
+                        <Label Text="Staff" 
+                               FontSize="14" 
+                               TextColor="#616161"/>
+                        <Frame Padding="0" 
+                               HasShadow="False" 
+                               BorderColor="#E0E0E0"
+                               CornerRadius="5">
+                            <Picker x:Name="StaffPicker" 
+                                    Title="Select staff"
+                                    ItemDisplayBinding="{Binding Staff_Name}"/>
+                        </Frame>
+                    </VerticalStackLayout>
+
+                    <!-- Table Picker -->
+                    <VerticalStackLayout>
+                        <Label Text="Table" 
+                            FontSize="14" 
+                            TextColor="#616161"/>
+                        <Frame Padding="0" 
+                            HasShadow="False" 
+                            BorderColor="#E0E0E0"
+                            CornerRadius="5">
+                            <Picker x:Name="TablePicker" 
+                                    Title="Select table"
+                                    ItemDisplayBinding="{Binding TableName}"/>
+                        </Frame>
+                    </VerticalStackLayout>
+                    
+                    <!-- Customer Section removed -->
+                    
+                    <!-- Order Date -->
+                    <VerticalStackLayout>
+                        <Label Text="Order Date" 
+                               FontSize="14" 
+                               TextColor="#616161"/>
+                        <Frame Padding="5" 
+                               HasShadow="False" 
+                               BorderColor="#E0E0E0"
+                               CornerRadius="5">
+                            <DatePicker x:Name="OrderDatePicker" 
+                                       Format="MMM dd, yyyy"/>
+                        </Frame>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+            
+            <!-- Payment Details Section - This frame is needed for dynamic payment method -->
+            <Frame x:Name="OrderDetailsFrame"
+                   Padding="20" 
+                   CornerRadius="10" 
+                   BorderColor="Transparent" 
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Payment Details" 
+                           FontSize="18" 
+                           FontAttributes="Bold" 
+                           TextColor="#3F51B5"/>
+                           
+                    <!-- Payment Status -->
+                    <VerticalStackLayout>
+                        <Label Text="Payment Status" 
+                               FontSize="14" 
+                               TextColor="#616161"/>
+                        <Frame Padding="0" 
+                               HasShadow="False" 
+                               BorderColor="#E0E0E0"
+                               CornerRadius="5">
+                            <Picker x:Name="PaymentStatusPicker" 
+                                    Title="Select status">
+                                <Picker.ItemsSource>
+                                    <x:Array Type="{x:Type x:String}">
+                                        <x:String>Pending</x:String>
+                                        <x:String>Paid</x:String>
+                                        <x:String>Cancelled</x:String>
+                                    </x:Array>
+                                </Picker.ItemsSource>
+                            </Picker>
+                        </Frame>
+                    </VerticalStackLayout>
+                    
+                    <!-- Payment Method will be added dynamically here -->
+                    
+                </VerticalStackLayout>
+            </Frame>
+            
+            <!-- Order Items Section -->
+            <Frame Padding="20" 
+                   CornerRadius="10" 
+                   BorderColor="Transparent" 
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="15">
+                    <Grid ColumnDefinitions="*,Auto">
+                        <Label Text="Order Items" 
+                               FontSize="18" 
+                               FontAttributes="Bold" 
+                               TextColor="#3F51B5"/>
+                        
+                        <Button Grid.Column="1"
+                                Text="+ Add Item"
+                                BackgroundColor="#4CAF50"
+                                TextColor="White"
+                                CornerRadius="10"
+                                HeightRequest="35"
+                                Padding="10,0"
+                                x:Name="AddItemButton"/>
+                    </Grid>
+                    
+                    <!-- Order Items List - UPDATED with direct event handlers -->
+                    <CollectionView x:Name="OrderItemsCollection"
+                                   HeightRequest="250"
+                                   EmptyView="No items added to this order">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame Margin="0,5"
+                                       Padding="15,10"
+                                       CornerRadius="10"
+                                       BorderColor="#E0E0E0"
+                                       HasShadow="False">
+                                    <Grid ColumnDefinitions="*,Auto,Auto" RowDefinitions="Auto,Auto">
+                                        <!-- Item Name and Price -->
+                                        <VerticalStackLayout Grid.Row="0" Grid.Column="0">
+                                            <Label Text="{Binding Menu_Name}" 
+                                                   FontAttributes="Bold"
+                                                   TextColor="#212121"/>
+                                            <Label Text="{Binding Price, StringFormat='฿{0:F2}'}" 
+                                                   FontSize="14"
+                                                   TextColor="#757575"/>
+                                        </VerticalStackLayout>
+                                        
+                                        <!-- Quantity -->
+                                        <HorizontalStackLayout Grid.Row="0" Grid.Column="1" 
+                                                             Spacing="5" 
+                                                             VerticalOptions="Center"
+                                                             Margin="0,0,10,0">
+                                            <Button Text="-"
+                                                    FontSize="12"
+                                                    WidthRequest="30"
+                                                    HeightRequest="30"
+                                                    Padding="0"
+                                                    CornerRadius="15"
+                                                    BackgroundColor="#E0E0E0"
+                                                    TextColor="#212121"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type local:OrderEditPage}}, Path=DecreaseQuantityCommand}"
+                                                    CommandParameter="{Binding .}"/>
+                                            
+                                            <Label Text="{Binding Quantity}" 
+                                                   VerticalOptions="Center"
+                                                   HorizontalOptions="Center"
+                                                   WidthRequest="30"
+                                                   HorizontalTextAlignment="Center"/>
+                                            
+                                            <Button Text="+"
+                                                    FontSize="12"
+                                                    WidthRequest="30"
+                                                    HeightRequest="30"
+                                                    Padding="0"
+                                                    CornerRadius="15"
+                                                    BackgroundColor="#E0E0E0"
+                                                    TextColor="#212121"
+                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type local:OrderEditPage}}, Path=IncreaseQuantityCommand}"
+                                                    CommandParameter="{Binding .}"/>
+                                        </HorizontalStackLayout>
+                                        
+                                        <!-- Remove Button -->
+                                        <Button Grid.Row="0" Grid.Column="2"
+                                                Text="✕"
+                                                FontSize="12"
+                                                WidthRequest="30"
+                                                HeightRequest="30"
+                                                Padding="0"
+                                                CornerRadius="15"
+                                                BackgroundColor="#F44336"
+                                                TextColor="White"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type local:OrderEditPage}}, Path=RemoveItemCommand}"
+                                                CommandParameter="{Binding .}"/>
+                                        
+                                        <!-- Subtotal -->
+                                        <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
+                                               Text="{Binding Subtotal, StringFormat='Subtotal: ฿{0:F2}'}"
+                                               FontAttributes="Bold"
+                                               HorizontalOptions="End"
+                                               Margin="0,10,0,0"
+                                               TextColor="#616161"/>
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                    
+                    <!-- Order Total -->
+                    <Frame Padding="15,10"
+                           CornerRadius="10"
+                           BackgroundColor="#F5F5F5"
+                           BorderColor="Transparent"
+                           HasShadow="False">
+                        <Label x:Name="TotalLabel"
+                               Text="Total: ฿0.00"
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               TextColor="#3F51B5"
+                               HorizontalOptions="End"/>
+                    </Frame>
+                </VerticalStackLayout>
+            </Frame>
+            
+            <!-- Notes Section -->
+            <Frame Padding="20" 
+                   CornerRadius="10" 
+                   BorderColor="Transparent" 
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Order Notes" 
+                           FontSize="18" 
+                           FontAttributes="Bold" 
+                           TextColor="#3F51B5"/>
+                    
+                    <Frame Padding="5" 
+                           HasShadow="False" 
+                           BorderColor="#E0E0E0"
+                           CornerRadius="5">
+                        <Editor x:Name="NotesEditor" 
+                               Placeholder="Add notes about this order"
+                               PlaceholderColor="#BDBDBD"
+                               HeightRequest="100"
+                               AutoSize="TextChanges"/>
+                    </Frame>
+                </VerticalStackLayout>
+            </Frame>
+            
+            <!-- Action Buttons -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="15" Margin="0,10,0,20">
+                <Button Grid.Column="0"
+                        Text="Cancel"
+                        BackgroundColor="#E0E0E0"
+                        TextColor="#616161"
+                        CornerRadius="10"
+                        x:Name="CancelButton"/>
+                
+                <Button Grid.Column="1"
+                        Text="Save Order"
+                        BackgroundColor="#4CAF50"
+                        TextColor="White"
+                        CornerRadius="10"
+                        x:Name="SaveButton"/>
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

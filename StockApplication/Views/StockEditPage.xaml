@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!-- StockEditPage.xaml -->
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StockApplication.Views.StockEditPage"
+             Title="Edit Stock">
+    
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+            <!-- Header -->
+            <Label x:Name="PageTitleLabel" 
+                   Text="Add New Stock Item" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   TextColor="#3F51B5"/>
+            
+            <!-- Form Section -->
+            <Frame Padding="20" 
+                   CornerRadius="10" 
+                   BorderColor="Transparent" 
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="15">
+                    <!-- Stock Name -->
+                    <VerticalStackLayout>
+                        <Label Text="Stock Name *" 
+                               FontSize="14" 
+                               TextColor="#616161"/>
+                        <Frame Padding="5" 
+                               HasShadow="False" 
+                               BorderColor="#E0E0E0"
+                               CornerRadius="5">
+                            <Entry x:Name="StockNameEntry" 
+                                   Placeholder="Enter stock name"
+                                   PlaceholderColor="#BDBDBD"/>
+                        </Frame>
+                    </VerticalStackLayout>
+                    
+                    <!-- Type -->
+                    <VerticalStackLayout>
+                        <Label Text="Type" 
+                               FontSize="14" 
+                               TextColor="#616161"/>
+                        <Frame Padding="5" 
+                               HasShadow="False" 
+                               BorderColor="#E0E0E0"
+                               CornerRadius="5">
+                            <Entry x:Name="TypeEntry" 
+                                   Placeholder="Enter stock type"
+                                   PlaceholderColor="#BDBDBD"/>
+                        </Frame>
+                    </VerticalStackLayout>
+                    
+                    <!-- Quantity and Unit -->
+                    <Grid ColumnDefinitions="*,*" ColumnSpacing="15">
+                        <!-- Quantity -->
+                        <VerticalStackLayout Grid.Column="0">
+                            <Label Text="Quantity *" 
+                                   FontSize="14" 
+                                   TextColor="#616161"/>
+                            <Frame Padding="5" 
+                                   HasShadow="False" 
+                                   BorderColor="#E0E0E0"
+                                   CornerRadius="5">
+                                <Entry x:Name="QuantityEntry" 
+                                       Placeholder="0.0"
+                                       PlaceholderColor="#BDBDBD"
+                                       Keyboard="Numeric"/>
+                            </Frame>
+                        </VerticalStackLayout>
+                        
+                        <!-- Unit -->
+                        <VerticalStackLayout Grid.Column="1">
+                            <Label Text="Unit" 
+                                   FontSize="14" 
+                                   TextColor="#616161"/>
+                            <Frame Padding="0" 
+                                   HasShadow="False" 
+                                   BorderColor="#E0E0E0"
+                                   CornerRadius="5">
+                                <Picker x:Name="UnitPicker" 
+                                        Title="Select unit">
+                                    <Picker.ItemsSource>
+                                        <x:Array Type="{x:Type x:String}">
+                                            <x:String>kg</x:String>
+                                            <x:String>g</x:String>
+                                            <x:String>L</x:String>
+                                            <x:String>ml</x:String>
+                                            <x:String>pcs</x:String>
+                                            <x:String>boxes</x:String>
+                                            <x:String>units</x:String>
+                                        </x:Array>
+                                    </Picker.ItemsSource>
+                                </Picker>
+                            </Frame>
+                        </VerticalStackLayout>
+                    </Grid>
+                    
+                    <!-- Expiry Date -->
+                    <VerticalStackLayout>
+                        <Label Text="Expiry Date" 
+                               FontSize="14" 
+                               TextColor="#616161"/>
+                        <Frame Padding="5" 
+                               HasShadow="False" 
+                               BorderColor="#E0E0E0"
+                               CornerRadius="5">
+                            <DatePicker x:Name="ExpiryDatePicker" 
+                                       Format="MMM dd, yyyy"/>
+                        </Frame>
+                    </VerticalStackLayout>
+                    
+                    <!-- Supplier -->
+                    <VerticalStackLayout>
+                        <Label Text="Supplier" 
+                               FontSize="14" 
+                               TextColor="#616161"/>
+                        <Frame Padding="0" 
+                               HasShadow="False" 
+                               BorderColor="#E0E0E0"
+                               CornerRadius="5">
+                            <Picker x:Name="SupplierPicker" 
+                                    Title="Select supplier"
+                                    ItemDisplayBinding="{Binding Sup_name}"/>
+                        </Frame>
+                    </VerticalStackLayout>
+                    
+                    <!-- Add New Supplier Button -->
+                    <Button Text="+ Add New Supplier" 
+                            BackgroundColor="Transparent"
+                            TextColor="#3F51B5"
+                            BorderColor="#3F51B5"
+                            BorderWidth="1"
+                            CornerRadius="5"
+                            HorizontalOptions="End"
+                            x:Name="AddSupplierButton"/>
+                </VerticalStackLayout>
+            </Frame>
+            
+            <!-- Additional Info Section -->
+            <Frame Padding="20" 
+                   CornerRadius="10" 
+                   BorderColor="Transparent" 
+                   HasShadow="True">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Additional Information" 
+                           FontSize="18" 
+                           FontAttributes="Bold" 
+                           TextColor="#3F51B5"/>
+                    
+                    <!-- Notes -->
+                    <VerticalStackLayout>
+                        <Label Text="Notes" 
+                               FontSize="14" 
+                               TextColor="#616161"/>
+                        <Frame Padding="5" 
+                               HasShadow="False" 
+                               BorderColor="#E0E0E0"
+                               CornerRadius="5">
+                            <Editor x:Name="NotesEditor" 
+                                   Placeholder="Add notes about this stock item"
+                                   PlaceholderColor="#BDBDBD"
+                                   HeightRequest="100"
+                                   AutoSize="TextChanges"/>
+                        </Frame>
+                    </VerticalStackLayout>
+                </VerticalStackLayout>
+            </Frame>
+            
+            <!-- Action Buttons -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="15" Margin="0,10,0,20">
+                <Button Grid.Column="0"
+                        Text="Cancel"
+                        BackgroundColor="#E0E0E0"
+                        TextColor="#616161"
+                        CornerRadius="10"
+                        x:Name="CancelButton"/>
+                
+                <Button Grid.Column="1"
+                        Text="Save"
+                        BackgroundColor="#4CAF50"
+                        TextColor="White"
+                        CornerRadius="10"
+                        x:Name="SaveButton"/>
+            </Grid>
+            
+            <!-- Required Fields Note -->
+            <Label Text="* Required fields" 
+                   FontSize="12" 
+                   TextColor="#9E9E9E"
+                   HorizontalOptions="Center"/>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

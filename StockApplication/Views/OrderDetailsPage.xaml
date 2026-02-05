@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StockApplication.Views.OrderDetailsPage"
+             Title="Order Details">
+    
+    <Grid RowDefinitions="Auto,*,Auto" Padding="15">
+        <!-- Header -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Margin="0,10,0,20">
+            <VerticalStackLayout Grid.Column="0">
+                <Label x:Name="OrderNumberLabel" 
+                       Text="Order #1" 
+                       FontSize="24" 
+                       FontAttributes="Bold" 
+                       TextColor="#3F51B5"/>
+                <Label x:Name="OrderDateLabel" 
+                       Text="Order Date: 01/01/2025" 
+                       FontSize="14" 
+                       TextColor="#757575"
+                       Margin="0,5,0,0"/>
+            </VerticalStackLayout>
+            
+            <!-- Status badge -->
+            <Border Grid.Column="1"
+                    Stroke="#E0E0E0"
+                    StrokeThickness="1"
+                    StrokeShape="RoundRectangle 10,10,10,10"
+                    Padding="15,8"
+                    x:Name="StatusBorder"
+                    BackgroundColor="#FF9800"
+                    VerticalOptions="Start">
+                <Label x:Name="StatusLabel"
+                       Text="Pending"
+                       TextColor="White"
+                       FontSize="14"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"/>
+            </Border>
+        </Grid>
+        
+        <!-- Content -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Spacing="20">
+                <!-- Order Summary Section -->
+                <Frame BorderColor="#EEEEEE" Padding="15" CornerRadius="10">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Order Summary" 
+                               FontSize="18" 
+                               FontAttributes="Bold" 
+                               TextColor="#212121"/>
+                        
+                        <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto,Auto" ColumnSpacing="10" RowSpacing="8">
+                            <!-- Customer -->
+                            <Label Grid.Row="0" Grid.Column="0" 
+                                   Text="Customer:" 
+                                   FontSize="14" 
+                                   TextColor="#757575"/>
+                            <Label Grid.Row="0" Grid.Column="1" 
+                                   x:Name="CustomerNameLabel"
+                                   Text="John Doe" 
+                                   FontSize="14" 
+                                   TextColor="#212121"/>
+                            
+                            <!-- Staff -->
+                            <Label Grid.Row="1" Grid.Column="0" 
+                                   Text="Staff:" 
+                                   FontSize="14" 
+                                   TextColor="#757575"/>
+                            <Label Grid.Row="1" Grid.Column="1" 
+                                   x:Name="StaffNameLabel"
+                                   Text="Jane Smith" 
+                                   FontSize="14" 
+                                   TextColor="#212121"/>
+                            
+                            <!-- Table -->
+                            <Label Grid.Row="2" Grid.Column="0" 
+                                   Text="Table:" 
+                                   FontSize="14" 
+                                   TextColor="#757575"/>
+                            <Label Grid.Row="2" Grid.Column="1" 
+                                   x:Name="TableNumberLabel"
+                                   Text="No table assigned" 
+                                   FontSize="14" 
+                                   TextColor="#212121"/>
+                            
+                            <!-- Total Items -->
+                            <Label Grid.Row="3" Grid.Column="0" 
+                                   Text="Total Items:" 
+                                   FontSize="14" 
+                                   TextColor="#757575"/>
+                            <Label Grid.Row="3" Grid.Column="1" 
+                                   x:Name="ItemsCountLabel"
+                                   Text="5" 
+                                   FontSize="14" 
+                                   TextColor="#212121"/>
+                            
+                            <!-- Total Amount -->
+                            <Label Grid.Row="4" Grid.Column="0" 
+                                   Text="Total Amount:" 
+                                   FontSize="14" 
+                                   TextColor="#757575"/>
+                            <Label Grid.Row="4" Grid.Column="1" 
+                                   x:Name="TotalAmountLabel"
+                                   Text="฿100.00" 
+                                   FontSize="16" 
+                                   FontAttributes="Bold" 
+                                   TextColor="#3F51B5"/>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Frame>
+                
+                <!-- Order Items Section -->
+                <Frame BorderColor="#EEEEEE" Padding="15" CornerRadius="10">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Order Items" 
+                               FontSize="18" 
+                               FontAttributes="Bold" 
+                               TextColor="#212121"/>
+                        
+                        <CollectionView x:Name="OrderItemsCollectionView">
+                            <CollectionView.EmptyView>
+                                <StackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                                    <Label Text="No items found" 
+                                           FontSize="16" 
+                                           TextColor="#9E9E9E"
+                                           HorizontalOptions="Center"/>
+                                </StackLayout>
+                            </CollectionView.EmptyView>
+                            
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid Padding="0,8" ColumnDefinitions="*, Auto, Auto" RowDefinitions="Auto,Auto">
+                                        <!-- Menu Name -->
+                                        <Label Grid.Row="0" Grid.Column="0"
+                                               Text="{Binding Menu_name}" 
+                                               FontSize="16" 
+                                               TextColor="#212121"/>
+                                        
+                                        <!-- Quantity -->
+                                        <Label Grid.Row="0" Grid.Column="1"
+                                               Text="{Binding Quantity, StringFormat='x{0}'}" 
+                                               FontSize="14" 
+                                               TextColor="#757575"
+                                               Margin="10,0"/>
+                                        
+                                        <!-- Subtotal -->
+                                        <Label Grid.Row="0" Grid.Column="2"
+                                               Text="{Binding Subtotal, StringFormat='฿{0:F2}'}" 
+                                               FontSize="14" 
+                                               TextColor="#212121"
+                                               HorizontalOptions="End"/>
+                                        
+                                        <!-- Price per item -->
+                                        <Label Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3"
+                                               Text="{Binding Price, StringFormat='฿{0:F2} each'}" 
+                                               FontSize="12" 
+                                               TextColor="#9E9E9E"/>
+                                        
+                                        <!-- Divider -->
+                                        <BoxView Grid.Row="2" Grid.ColumnSpan="3"
+                                                 Color="#EEEEEE"
+                                                 HeightRequest="1"
+                                                 Margin="0,8,0,0"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </VerticalStackLayout>
+                </Frame>
+                
+                <!-- Notes Section (if available) -->
+                <Frame BorderColor="#EEEEEE" Padding="15" CornerRadius="10"
+                       x:Name="NotesFrame"
+                       IsVisible="False">
+                    <VerticalStackLayout Spacing="10">
+                        <Label Text="Order Notes" 
+                               FontSize="18" 
+                               FontAttributes="Bold" 
+                               TextColor="#212121"/>
+                        
+                        <Label x:Name="NotesLabel"
+                               Text="No notes available"
+                               TextColor="#757575" />
+                    </VerticalStackLayout>
+                </Frame>
+            </VerticalStackLayout>
+        </ScrollView>
+        
+        <!-- Footer with Action Buttons -->
+        <HorizontalStackLayout Grid.Row="2" 
+                               Spacing="10" 
+                               HorizontalOptions="Center"
+                               Margin="0,20,0,0">
+            <Button Text="Back"
+                    BackgroundColor="#9E9E9E"
+                    TextColor="White"
+                    CornerRadius="10"
+                    WidthRequest="100"
+                    HeightRequest="45"
+                    x:Name="BackButton"/>
+            
+            <Button Text="Edit Order"
+                    BackgroundColor="#2196F3"
+                    TextColor="White"
+                    CornerRadius="10"
+                    WidthRequest="120"
+                    HeightRequest="45"
+                    x:Name="EditButton"/>
+            
+            <Button Text="Checkout"
+                    BackgroundColor="#4CAF50"
+                    TextColor="White"
+                    CornerRadius="10"
+                    WidthRequest="120"
+                    HeightRequest="45"
+                    x:Name="CheckoutButton"
+                    IsVisible="True"/>
+        </HorizontalStackLayout>
+    </Grid>
+</ContentPage>

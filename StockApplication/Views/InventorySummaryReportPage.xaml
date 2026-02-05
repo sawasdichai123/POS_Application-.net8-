@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="StockApplication.Views.Reports.InventorySummaryReportPage"
+             Title="Inventory Summary">
+
+    <Grid RowDefinitions="Auto,Auto,*,Auto" Padding="15">
+        <!-- Header -->
+        <VerticalStackLayout Grid.Row="0" Margin="0,10,0,20">
+            <Label Text="Inventory Summary Report" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   TextColor="#3F51B5"/>
+            
+            <!-- Date Range Filter -->
+            <Grid ColumnDefinitions="*,Auto,*,Auto" ColumnSpacing="10" Margin="0,15,0,0">
+                <Label Grid.Column="0" Text="From:" VerticalOptions="Center"/>
+                <DatePicker Grid.Column="1" x:Name="StartDatePicker"/>
+                <Label Grid.Column="2" Text="To:" VerticalOptions="Center"/>
+                <DatePicker Grid.Column="3" x:Name="EndDatePicker"/>
+            </Grid>
+            
+            <Button Text="Apply Filters" 
+                    BackgroundColor="#3F51B5"
+                    TextColor="White"
+                    CornerRadius="5"
+                    HorizontalOptions="End"
+                    Margin="0,10,0,0"
+                    x:Name="ApplyFiltersButton"/>
+        </VerticalStackLayout>
+        
+        <!-- Summary Cards -->
+        <Grid Grid.Row="1" ColumnDefinitions="*,*,*" ColumnSpacing="15" Margin="0,0,0,20">
+            <!-- Total Items Card -->
+            <Frame Grid.Column="0" 
+                   BorderColor="Transparent"
+                   BackgroundColor="#E3F2FD"
+                   CornerRadius="10"
+                   Padding="15">
+                <VerticalStackLayout HorizontalOptions="Center">
+                    <Label Text="Total Items" 
+                           FontSize="14" 
+                           TextColor="#1976D2"
+                           HorizontalOptions="Center"/>
+                    <Label x:Name="TotalItemsLabel" 
+                           Text="0" 
+                           FontSize="24" 
+                           FontAttributes="Bold"
+                           TextColor="#1976D2"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Frame>
+            
+            <!-- Total Quantity Card -->
+            <Frame Grid.Column="1" 
+                   BorderColor="Transparent"
+                   BackgroundColor="#E8F5E9"
+                   CornerRadius="10"
+                   Padding="15">
+                <VerticalStackLayout HorizontalOptions="Center">
+                    <Label Text="Total Quantity" 
+                           FontSize="14" 
+                           TextColor="#4CAF50"
+                           HorizontalOptions="Center"/>
+                    <Label x:Name="TotalQuantityLabel" 
+                           Text="0" 
+                           FontSize="24" 
+                           FontAttributes="Bold"
+                           TextColor="#4CAF50"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Frame>
+            
+            <!-- Average Quantity Card -->
+            <Frame Grid.Column="2" 
+                   BorderColor="Transparent"
+                   BackgroundColor="#FFF8E1"
+                   CornerRadius="10"
+                   Padding="15">
+                <VerticalStackLayout HorizontalOptions="Center">
+                    <Label Text="Average" 
+                           FontSize="14" 
+                           TextColor="#FF9800"
+                           HorizontalOptions="Center"/>
+                    <Label x:Name="AverageQuantityLabel" 
+                           Text="0" 
+                           FontSize="24" 
+                           FontAttributes="Bold"
+                           TextColor="#FF9800"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </Frame>
+        </Grid>
+        
+        <!-- Data Table -->
+        <Frame Grid.Row="2" 
+               BorderColor="#E0E0E0"
+               CornerRadius="10"
+               Padding="0"
+               Margin="0,0,0,20">
+            <CollectionView x:Name="StockItemsCollection">
+                <CollectionView.Header>
+                    <Grid ColumnDefinitions="*, *, *, *" BackgroundColor="#F5F5F5" Padding="15">
+                        <Label Grid.Column="0" Text="Item Name" FontAttributes="Bold"/>
+                        <Label Grid.Column="1" Text="Quantity" FontAttributes="Bold"/>
+                        <Label Grid.Column="2" Text="Unit" FontAttributes="Bold"/>
+                        <Label Grid.Column="3" Text="Supplier" FontAttributes="Bold"/>
+                    </Grid>
+                </CollectionView.Header>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid ColumnDefinitions="*, *, *, *" Padding="15">
+                            <Label Grid.Column="0" Text="{Binding Stock_Name}"/>
+                            <Label Grid.Column="1" Text="{Binding Quantity}"/>
+                            <Label Grid.Column="2" Text="{Binding Unit}"/>
+                            <Label Grid.Column="3" Text="{Binding SupplierName}"/>
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </Frame>
+        
+        <!-- Export Options -->
+        <Grid Grid.Row="3" ColumnDefinitions="*,*" ColumnSpacing="15">
+            <Button Grid.Column="0"
+                    Text="Export as CSV"
+                    BackgroundColor="#795548"
+                    TextColor="White"
+                    CornerRadius="5"
+                    x:Name="ExportCsvButton"/>
+            
+            <Button Grid.Column="1"
+                    Text="Export as PDF"
+                    BackgroundColor="#E91E63"
+                    TextColor="White"
+                    CornerRadius="5"
+                    x:Name="ExportPdfButton"/>
+        </Grid>
+    </Grid>
+</ContentPage>
